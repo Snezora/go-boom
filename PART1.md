@@ -5,7 +5,7 @@
 No | ID         |         Name         | Task descriptions | Contribution %
 -- | ---------- | -------------------- | ----------------- | --------------
 1  | 1221302721 | Lester Liew Jun Min  |                   |
-2  |            |                      |                   |
+2  | 1201103427 |   Hong Yoong Shem    |                   |
 3  |            |                      |                   |
 4  |            |                      |                   |
 
