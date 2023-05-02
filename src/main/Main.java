@@ -33,10 +33,14 @@ public class Main {
         }
         return result;
     }
+
+
     
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Cards cards = new Cards();
+        int roundCounter = 1;
+
         ArrayList<String> center = new ArrayList<>();
         ArrayList<String> player1 = new ArrayList<>();
         ArrayList<String> player2 = new ArrayList<>();
@@ -59,6 +63,13 @@ public class Main {
         // System.out.print("> ");
         // player.getNumofPlayers(scanner.nextInt());
 
+        // Number of tricks (Rounds)
+        if (roundCounter == 13) { // 13 rounds for a full game
+            // Add code to end the game or start a new game
+        } else {
+            System.out.println("~ ~ TRICK #" + roundCounter + " ~ ~");
+            // Add code to start a new round
+        }
         getCardsIntoPlayer(player1, cards);
         System.out.println("Player 1: " + player1.toString());
         getCardsIntoPlayer(player2, cards);
@@ -70,10 +81,21 @@ public class Main {
 
         System.out.println("Center: " + center.toString());
 
-
         System.out.println("Remaining Deck: " + cards.showCards());
 
-        System.out.println("Player goes first is player " + determineFirstPlayer(center));
+        System.out.println("Player goes first is player " + determineFirstPlayer(center)) ;
+
+        System.out.println("Player " + determineFirstPlayer(center) + "> " );
+        String playedcards = scanner.nextLine();
+
+
         scanner.close();
+        roundCounter++;
+
+        
+
+
+
+        
     }
 }
