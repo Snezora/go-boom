@@ -22,12 +22,12 @@ public class Main {
     static Player thirdPlayer = new Player();
     static Player fourthPlayer = new Player();
 
-    public static int determineFirstPlayer(ArrayList<String> center, int roundCounter) {
+    public static int determineFirstPlayer(Player center, int roundCounter) {
         String cardNumber;
         String card;
         int result = 0;
         if (roundCounter <= 1) {
-            card = center.get(0);
+            card = center.cardlist.get(0);
             cardNumber = card.substring(1);
             if (cardNumber.equals("A") || cardNumber.equals("5") || cardNumber.equals("9") || cardNumber.equals("K")) {
                 result = 1;
@@ -115,7 +115,7 @@ public class Main {
         int roundCounter = 1;
         String playedcards; // User input for the card they want to play
 
-        ArrayList<String> center = new ArrayList<>();
+        Player center = new Player();
 
         // Create the cards for playing
         cards.initialiseCards();
@@ -126,7 +126,7 @@ public class Main {
         System.out.println();
 
         // Get the center card first
-        center.add(cards.getLeadingCard());
+        center.addCard(cards.getLeadingCard());
         System.out.println(cards.showCards() + " <-- First Removed Deck");
         System.out.println();
         System.out.println("~ ~ TRICK #" + roundCounter + " ~ ~");
@@ -141,7 +141,7 @@ public class Main {
         player4.getCardsIntoPlayer(cards);
         System.out.println("Player 4: " + player4.getCardlist());
 
-        System.out.println("Center: " + center.toString()); // Show the center card
+        System.out.println("Center: " + center.getCardlist()); // Show the center card
 
         System.out.println("Remaining Deck: " + cards.showCards()); // Show the remaining deck
 
@@ -202,47 +202,47 @@ public class Main {
             System.out.print(firstPlayer.name + "> "); // ! Notice here how I used firstPlayer.name, which will make our
                                                        // job easier
             playedcards = scanner.nextLine(); // Get the card played by the player
-            firstPlayer.playCard(playedcards, center, cards.getLeadingCard());
+            firstPlayer.playCard(playedcards, center);
             System.out.println();
             System.out.println("~ ~ TRICK #" + roundCounter + " ~ ~");
             System.out.println("Player 1: " + player1.getCardlist());
             System.out.println("Player 2: " + player2.getCardlist());
             System.out.println("Player 3: " + player3.getCardlist());
             System.out.println("Player 4: " + player4.getCardlist());
-            System.out.println("Center: " + center.toString());
+            System.out.println("Center: " + center.getCardlist());
 
             System.out.print(secondPlayer.name + "> ");
             playedcards = scanner.nextLine(); // Get the card played by the player
-            secondPlayer.playCard(playedcards, center, cards.getLeadingCard());
+            secondPlayer.playCard(playedcards, center);
             System.out.println();
             System.out.println("~ ~ TRICK #" + roundCounter + " ~ ~");
             System.out.println("Player 1: " + player1.getCardlist());
             System.out.println("Player 2: " + player2.getCardlist());
             System.out.println("Player 3: " + player3.getCardlist());
             System.out.println("Player 4: " + player4.getCardlist());
-            System.out.println("Center: " + center.toString());
+            System.out.println("Center: " + center.getCardlist());
 
             System.out.print(thirdPlayer.name + "> ");
             playedcards = scanner.nextLine(); // Get the card played by the player
-            thirdPlayer.playCard(playedcards, center, cards.getLeadingCard());
+            thirdPlayer.playCard(playedcards, center);
             System.out.println();
             System.out.println("~ ~ TRICK #" + roundCounter + " ~ ~");
             System.out.println("Player 1: " + player1.getCardlist());
             System.out.println("Player 2: " + player2.getCardlist());
             System.out.println("Player 3: " + player3.getCardlist());
             System.out.println("Player 4: " + player4.getCardlist());
-            System.out.println("Center: " + center.toString());
+            System.out.println("Center: " + center.getCardlist());
 
             System.out.print(fourthPlayer.name + "> ");
             playedcards = scanner.nextLine(); // Get the card played by the player
-            fourthPlayer.playCard(playedcards, center, cards.getLeadingCard());
+            fourthPlayer.playCard(playedcards, center);
             System.out.println();
             System.out.println("~ ~ TRICK #" + roundCounter + " ~ ~");
             System.out.println("Player 1: " + player1.getCardlist());
             System.out.println("Player 2: " + player2.getCardlist());
             System.out.println("Player 3: " + player3.getCardlist());
             System.out.println("Player 4: " + player4.getCardlist());
-            System.out.println("Center: " + center.toString());
+            System.out.println("Center: " + center.getCardlist());
 
             roundCounter++;
 
