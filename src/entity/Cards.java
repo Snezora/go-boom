@@ -84,6 +84,8 @@ public class Cards {
         return result;
     }
 
+    public String getLeadingCard() {
+        return getAndRemoveCard(0);
+    }
     
-
 }
