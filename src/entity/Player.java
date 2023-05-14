@@ -53,11 +53,23 @@ public class Player {
         printCardlist();
     }
 
-    public void playCard(String card, ArrayList<String> center) { //! Add an if else statement here that prevents player from playing a card they don't have!
-        center.add(card);
-        removeCard(card);
+    public void playCard(String card, ArrayList<String> center, String leadingCard) {
+        if (cardlist.contains(card)) {
+            String suit = card.substring(0, 1);
+            String rank = card.substring(1);
+    
+            String leadingSuit = leadingCard.substring(0, 1);
+            String leadingRank = leadingCard.substring(1);
+    
+            if (suit.equals(leadingSuit) || rank.equals(leadingRank)) {
+                center.add(card);
+                removeCard(card);
+            } else {
+                System.out.println("You can only play a card with the same suit or rank as the leading card!");
+            }
+        } else {
+            System.out.println("You don't have that card!");
+        }
     }
-
+    
 }
-
-
