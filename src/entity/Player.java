@@ -8,8 +8,7 @@ public class Player {
 
     public Player() { 
     }
-
-
+    
     public Player(ArrayList<String> cardlist) { //constructor
         this.cardlist = cardlist;
     }
@@ -63,16 +62,25 @@ public class Player {
     
             String leadingSuit = leadingCard.substring(0, 1);
             String leadingRank = leadingCard.substring(1);
-    
+
+
             if (suit.equals(leadingSuit) || rank.equals(leadingRank)) {
                 center.cardlist.add(card);
                 removeCard(card);
+                
             } else {
                 System.out.println("You can only play a card with the same suit or rank as the leading card!");
+
             }
         } else {
             System.out.println("You don't have that card!");
         }
+            
+
     }
+
+
+
+    
     
 }

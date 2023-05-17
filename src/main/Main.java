@@ -39,74 +39,73 @@ public class Main {
                 result = 4;
             }
             previousFirstPlayer = result;
-        } else {
-            // ! Add a function here in which we split up the first character (Suit) and
-            // ! second character (Number) of the card
-            // ! Then we make it so that first character must be same, and second character
-            // ! must be bigger than the first card.
-            // ! Use substring if needed or if anything else is better, use it
-
-            // ? I tried to do this but failed, if you guys wanna try and fix it feel free
-            // or if you want to use your own code, feel free too lmao
-
-            /*
-             * for (String centerCard : center) {
-             * String resultCard = "";
-             * int newNo = 0;
-             * if (centerCard.substring(0, 1).equals(center.get(0).substring(0, 1))) {
-             * int originalNo;
-             * if (center.get(0).substring(1, 2).equals("X")) {
-             * originalNo = 10;
-             * } else if (center.get(0).substring(1, 2).equals("J")) {
-             * originalNo = 11;
-             * } else if (center.get(0).substring(1, 2).equals("Q")) {
-             * originalNo = 12;
-             * } else if (center.get(0).substring(1, 2).equals("K")) {
-             * originalNo = 13;
-             * } else if (center.get(0).substring(1, 2).equals("A")) {
-             * originalNo = 1;
-             * } else {
-             * originalNo = Integer.parseInt(center.get(0).substring(1, 2));
-             * }
-             * 
-             * for (String centerCards : center) {
-             * 
-             * if (centerCard.substring(0, 1).equals(center.get(0).substring(0, 1))) {
-             * if (centerCards.substring(1, 2).equals("X")) {
-             * newNo = 10;
-             * } else if (centerCards.substring(1, 2).equals("J")) {
-             * newNo = 11;
-             * } else if (centerCards.substring(1, 2).equals("Q")) {
-             * newNo = 12;
-             * } else if (centerCards.substring(1, 2).equals("K")) {
-             * newNo = 13;
-             * } else if (centerCards.substring(1, 2).equals("A")) {
-             * newNo = 1;
-             * } else {
-             * newNo = Integer.parseInt(centerCards.substring(1, 2));
-             * }
-             * }
-             * if (originalNo < newNo) {
-             * originalNo = newNo;
-             * resultCard = centerCards;
-             * for (int i = 0; i < center.size(); i++) {
-             * if (center.get(i).equals(resultCard)) {
-             * result = (i + 1);
-             * break;
-             * }
-             * }
-             * } else {
-             * result = previousFirstPlayer;
-             * }
-             * }
-             * } else {
-             * result = previousFirstPlayer;
-             * }
-             * 
-             * }
-             */
+        } else {     
+            
+            // This would find the player that played the highest rank car of the same suit as the lead card
+            String leadCardSuit = center.cardlist.get(0).substring(0, 1);
+            int highestRank = -1;
+            for (int i = 0; i < 4; i++) {
+                Player currentPlayer = getPlayerByNumber((previousFirstPlayer + i) % 4 + 1);
+                String currentCard = currentPlayer.cardlist.get(0);
+                String currentCardSuit = currentCard.substring(0, 1);
+                String currentCardNumber = currentCard.substring(1);
+                if (currentCardSuit.equals(leadCardSuit) && getCardRank(currentCardNumber) > highestRank) {
+                    highestRank = getCardRank(currentCardNumber);
+                    result = (previousFirstPlayer + i) % 4 + 1;
+                }
+            }
+           
         }
         return result;
+    }
+
+    public static Player getPlayerByNumber(int playerNumber) {
+        switch (playerNumber) {
+            case 1:
+                return player1;
+            case 2:
+                return player2;
+            case 3:
+                return player3;
+            case 4:
+                return player4;
+            default:
+                return null;
+        }
+    }
+
+
+    public static int getCardRank(String cardNumber) {
+        switch (cardNumber) {
+            case "A":
+                return 14;
+            case "K":
+                return 13;
+            case "Q":
+                return 12;
+            case "J":
+                return 11;
+            case "X":
+                return 10;
+            case "9":
+                return 9;
+            case "8":
+                return 8;
+            case "7":
+                return 7;
+            case "6":
+                return 6;
+            case "5":
+                return 5;
+            case "4":
+                return 4;
+            case "3":
+                return 3;
+            case "2":
+                return 2;
+            default:
+                return 0;
+        }
     }
 
     public static void main(String[] args) {
@@ -199,8 +198,7 @@ public class Main {
 
             System.out.println("Player goes first is " + firstPlayer.name); // Determine who goes first
 
-            System.out.print(firstPlayer.name + "> "); // ! Notice here how I used firstPlayer.name, which will make our
-                                                       // job easier
+            System.out.print(firstPlayer.name + "> "); // ! Notice here how I used firstPlayer.name, which will make our job easier
             playedcards = scanner.nextLine(); // Get the card played by the player
             firstPlayer.playCard(playedcards, center);
             System.out.println();
