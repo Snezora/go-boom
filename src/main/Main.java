@@ -138,8 +138,7 @@ public class Main {
             default:
                 return 0;
         }
-    }
-
+    }//here
 
     public static void defaultScreen(int roundCounter, Player center, Cards cards) {
         System.out.println();
@@ -179,6 +178,13 @@ public class Main {
                 Thread.sleep(1200);
                 System.out.print(".");
                 System.out.println();
+            } else if (playedcards.equals("help") || playedcards.equals("?")) {
+                System.out.println("============================");
+                System.out.println("Available commands:");
+                System.out.println("1. s - Start a new game");
+                System.out.println("2. x - Exit the game");
+                System.out.println("3. d - Draw cards from deck");
+                System.out.println("============================");
             } else if (playedcards.equals("x")) {
                 System.out.println("Thanks for playing!");
                 Thread.sleep(1500);
@@ -208,6 +214,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws InterruptedException {
+        Scanner scanner = new Scanner(System.in);
         do {
             do {
                 
@@ -225,6 +232,16 @@ public class Main {
                     center.clearCardlist();
                     cards.initialiseCards();
                     cards.shuffleCards();
+
+                    
+                    System.out.println("Available commands:");
+                    System.out.println("1. s - Start a new game");
+                    System.out.println("2. x - Exit the game");
+                    System.out.println("3. d - Draw cards from deck");
+                    System.out.println("You may type in 'help' or press '?' in the middle of the game to view the commands.");
+                    System.out.println("\n");
+                    System.out.println("Press any button to continue...");
+                    scanner.nextLine();
 
                     // Get the center card first
                     center.addCard(cards.getLeadingCard());
@@ -357,5 +374,3 @@ public class Main {
         System.exit(0);
     }
 }
-
-
