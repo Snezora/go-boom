@@ -1,14 +1,16 @@
 package main;
 
-import java.util.ArrayList;
 import java.util.Scanner;
-
 import entity.Cards;
 import entity.Player;
 
 public class Main {
 
     static int previousFirstPlayer;
+    static boolean starter = true;
+    static boolean restart = false;
+    static boolean newRound = false;
+
 
     // Create the players
     static Player player1 = new Player();
@@ -22,7 +24,7 @@ public class Main {
     static Player thirdPlayer = new Player();
     static Player fourthPlayer = new Player();
 
-    public static int determineFirstPlayer(Player center, int roundCounter) {
+    public static int determineFirstPlayer(Player center, int roundCounter) throws InterruptedException {
         String cardNumber;
         String card;
         int result = 0;
@@ -39,22 +41,53 @@ public class Main {
                 result = 4;
             }
             previousFirstPlayer = result;
-        } else {     
-            
-            // This would find the player that played the highest rank car of the same suit as the lead card
+        } else {
+
+            // This would find the player that played the highest rank car of the same suit
+            // as the lead card
+            // String leadCardSuit = center.cardlist.get(0).substring(0, 1);
+            // int highestRank = -1;
+            // for (int i = 0; i < 4; i++) {
+            // Player currentPlayer = getPlayerByNumber((previousFirstPlayer + i) % 4 + 1);
+            // String currentCard = currentPlayer.cardlist.get(0);
+            // String currentCardSuit = currentCard.substring(0, 1);
+            // String currentCardNumber = currentCard.substring(1);
+            // if (currentCardSuit.equals(leadCardSuit) && getCardRank(currentCardNumber) >
+            // highestRank) {
+            // highestRank = getCardRank(currentCardNumber);
+            // result = (previousFirstPlayer + i) % 4 + 1;
+            // }
+            // }
             String leadCardSuit = center.cardlist.get(0).substring(0, 1);
+            String leadCardRank = center.cardlist.get(0).substring(1, 2);
             int highestRank = -1;
-            for (int i = 0; i < 4; i++) {
-                Player currentPlayer = getPlayerByNumber((previousFirstPlayer + i) % 4 + 1);
-                String currentCard = currentPlayer.cardlist.get(0);
-                String currentCardSuit = currentCard.substring(0, 1);
-                String currentCardNumber = currentCard.substring(1);
-                if (currentCardSuit.equals(leadCardSuit) && getCardRank(currentCardNumber) > highestRank) {
-                    highestRank = getCardRank(currentCardNumber);
-                    result = (previousFirstPlayer + i) % 4 + 1;
+            int cardRankNumber = getCardRank(leadCardRank);
+            highestRank = cardRankNumber;
+            if (center.cardlist.size() >= 4) {
+                for (int i = 0; i < 4; i++) {
+                    Player currentPlayer = getPlayerByNumber((previousFirstPlayer + i) % 4 + 1);
+                    String currentCard = currentPlayer.cardPlayed;
+                    String currentCardSuit = currentCard.substring(0, 1);
+                    String currentCardNumber = currentCard.substring(1, 2);
+                    if (currentCardSuit.equals(leadCardSuit) && getCardRank(currentCardNumber) > highestRank) {
+                        highestRank = getCardRank(currentCardNumber);
+                        result = Integer.parseInt(currentPlayer.name.substring(7, 8));
+                    }
                 }
             }
-           
+            else{
+                System.out.println("Not enough cards inside the card deck to play! Who didn't play their card >:(");
+                Thread.sleep(2000);
+                System.out.print("Restarting Game");
+                Thread.sleep(1200);
+                System.out.print(".");
+                Thread.sleep(1200);
+                System.out.print(".");
+                Thread.sleep(1200);
+                System.out.print(".");
+                System.out.println();
+                restart = true;
+            }
         }
         return result;
     }
@@ -73,7 +106,6 @@ public class Main {
                 return null;
         }
     }
-
 
     public static int getCardRank(String cardNumber) {
         switch (cardNumber) {
@@ -108,143 +140,221 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in); // Create the scanner
-        Cards cards = new Cards(); // Create the cards (the original deck)
-        int roundCounter = 1;
-        String playedcards; // User input for the card they want to play
-
-        Player center = new Player();
-
-        // Create the cards for playing
-        cards.initialiseCards();
-        System.out.println(cards.showCards() + " <-- Original & Tidied Deck");
-        System.out.println();
-        cards.shuffleCards();
-        System.out.println(cards.showCards() + " <-- Shuffled Deck");
-        System.out.println();
-
-        // Get the center card first
-        center.addCard(cards.getLeadingCard());
-        System.out.println(cards.showCards() + " <-- First Removed Deck");
+    public static void defaultScreen(int roundCounter, Player center, Cards cards) {
         System.out.println();
         System.out.println("~ ~ TRICK #" + roundCounter + " ~ ~");
-
-        // Get the 7 front cards of the deck into players hands
-        player1.getCardsIntoPlayer(cards);
         System.out.println("Player 1: " + player1.getCardlist());
-        player2.getCardsIntoPlayer(cards);
         System.out.println("Player 2: " + player2.getCardlist());
-        player3.getCardsIntoPlayer(cards);
         System.out.println("Player 3: " + player3.getCardlist());
-        player4.getCardsIntoPlayer(cards);
         System.out.println("Player 4: " + player4.getCardlist());
+        System.out.println();
+        System.out.println("Center  : " + center.getCardlist());
+        System.out.println("Deck    : " + cards.showCards());
+        System.out.println("Score   : Player 1 = " + player1.score + " | Player 2 = " + player2.score + " | Player 3 = "
+                + player3.score + " | Player 4 = " + player4.score);
+    }
 
-        System.out.println("Center: " + center.getCardlist()); // Show the center card
-
-        System.out.println("Remaining Deck: " + cards.showCards()); // Show the remaining deck
-
-        // Number of tricks (Rounds)
-        while (roundCounter <= 13) { // 13 rounds for a full game
-
-            switch (determineFirstPlayer(center, roundCounter)) {
-                case 1:
-                    firstPlayer = player1;
-                    firstPlayer.name = "Player 1";
-                    secondPlayer = player2;
-                    secondPlayer.name = "Player 2";
-                    thirdPlayer = player3;
-                    thirdPlayer.name = "Player 3";
-                    fourthPlayer = player4;
-                    fourthPlayer.name = "Player 4";
-                    break;
-
-                case 2:
-                    firstPlayer = player2;
-                    firstPlayer.name = "Player 2";
-                    secondPlayer = player3;
-                    secondPlayer.name = "Player 3";
-                    thirdPlayer = player4;
-                    thirdPlayer.name = "Player 4";
-                    fourthPlayer = player1;
-                    fourthPlayer.name = "Player 1";
-                    break;
-
-                case 3:
-                    firstPlayer = player3;
-                    firstPlayer.name = "Player 3";
-                    secondPlayer = player4;
-                    secondPlayer.name = "Player 4";
-                    thirdPlayer = player1;
-                    thirdPlayer.name = "Player 1";
-                    fourthPlayer = player2;
-                    fourthPlayer.name = "Player 2";
-                    break;
-
-                case 4:
-                    firstPlayer = player4;
-                    firstPlayer.name = "Player 4";
-                    secondPlayer = player1;
-                    secondPlayer.name = "Player 1";
-                    thirdPlayer = player2;
-                    thirdPlayer.name = "Player 2";
-                    fourthPlayer = player3;
-                    fourthPlayer.name = "Player 3";
-                    break;
-
-                default:
-                    break;
+    public static void playerTurn(Player player, Cards cards, int roundCounter, Player center)
+            throws InterruptedException {
+        Scanner scanner = new Scanner(System.in);
+        String playedcards;
+        player.passCard = true;
+        while (player.passCard == true) {
+            System.out.print(player.name + "> "); // ! Notice here how I used firstPlayer.name, which will make our job
+                                                  // easier
+            playedcards = scanner.nextLine(); // Get the card played by the player
+            if (playedcards.equals("d")) {
+                player.drawOneCard(cards);
+                defaultScreen(roundCounter, center, cards);
+            } else if (playedcards.equals("s")) {
+                restart = true;
+                player.passCard = false;
+                System.out.println();
+                System.out.print("Restarting Game");
+                Thread.sleep(1200);
+                System.out.print(".");
+                Thread.sleep(1200);
+                System.out.print(".");
+                Thread.sleep(1200);
+                System.out.print(".");
+                System.out.println();
+            } else if (playedcards.equals("x")) {
+                System.out.println("Thanks for playing!");
+                Thread.sleep(1500);
+                System.exit(0);
+            } else {
+                player.cardPlayed = playedcards;
+                if (roundCounter != 1 && player.equals(firstPlayer)) {
+                    player.setupCard(playedcards, center);
+                } else {
+                    player.playCard(playedcards, center);
+                }
+                defaultScreen(roundCounter, center, cards);
             }
-
-            System.out.println("Player goes first is " + firstPlayer.name); // Determine who goes first
-
-            System.out.print(firstPlayer.name + "> "); // ! Notice here how I used firstPlayer.name, which will make our job easier
-            playedcards = scanner.nextLine(); // Get the card played by the player
-            firstPlayer.playCard(playedcards, center);
-            System.out.println();
-            System.out.println("~ ~ TRICK #" + roundCounter + " ~ ~");
-            System.out.println("Player 1: " + player1.getCardlist());
-            System.out.println("Player 2: " + player2.getCardlist());
-            System.out.println("Player 3: " + player3.getCardlist());
-            System.out.println("Player 4: " + player4.getCardlist());
-            System.out.println("Center: " + center.getCardlist());
-
-            System.out.print(secondPlayer.name + "> ");
-            playedcards = scanner.nextLine(); // Get the card played by the player
-            secondPlayer.playCard(playedcards, center);
-            System.out.println();
-            System.out.println("~ ~ TRICK #" + roundCounter + " ~ ~");
-            System.out.println("Player 1: " + player1.getCardlist());
-            System.out.println("Player 2: " + player2.getCardlist());
-            System.out.println("Player 3: " + player3.getCardlist());
-            System.out.println("Player 4: " + player4.getCardlist());
-            System.out.println("Center: " + center.getCardlist());
-
-            System.out.print(thirdPlayer.name + "> ");
-            playedcards = scanner.nextLine(); // Get the card played by the player
-            thirdPlayer.playCard(playedcards, center);
-            System.out.println();
-            System.out.println("~ ~ TRICK #" + roundCounter + " ~ ~");
-            System.out.println("Player 1: " + player1.getCardlist());
-            System.out.println("Player 2: " + player2.getCardlist());
-            System.out.println("Player 3: " + player3.getCardlist());
-            System.out.println("Player 4: " + player4.getCardlist());
-            System.out.println("Center: " + center.getCardlist());
-
-            System.out.print(fourthPlayer.name + "> ");
-            playedcards = scanner.nextLine(); // Get the card played by the player
-            fourthPlayer.playCard(playedcards, center);
-            System.out.println();
-            System.out.println("~ ~ TRICK #" + roundCounter + " ~ ~");
-            System.out.println("Player 1: " + player1.getCardlist());
-            System.out.println("Player 2: " + player2.getCardlist());
-            System.out.println("Player 3: " + player3.getCardlist());
-            System.out.println("Player 4: " + player4.getCardlist());
-            System.out.println("Center: " + center.getCardlist());
-
-            roundCounter++;
-
         }
+    }
 
+    public static void checkWin(Player player) throws InterruptedException {
+        if (player.cardlist.isEmpty()) {
+            newRound = true;
+            player.score++;
+            System.out.println(player.name + " has won the 1st match!");
+            System.out.println("Moving onwards to the next match.");
+            Thread.sleep(2000);
+        } else {
+            newRound = false;
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        do {
+            do {
+                
+
+                Player center = new Player();
+
+                do {
+                    Cards cards = new Cards(); // Create the cards (the original deck)
+                    int roundCounter = 1;
+                    // Create the cards for playing
+                    player1.clearCardlist();
+                    player2.clearCardlist();
+                    player3.clearCardlist();
+                    player4.clearCardlist();
+                    center.clearCardlist();
+                    cards.initialiseCards();
+                    cards.shuffleCards();
+
+                    // Get the center card first
+                    center.addCard(cards.getLeadingCard());
+                    System.out.println();
+                    System.out.println("~ ~ TRICK #" + roundCounter + " ~ ~");
+
+                    // Get the 7 front cards of the deck into players hands
+                    player1.getCardsIntoPlayer(cards);
+                    System.out.println("Player 1: " + player1.getCardlist());
+                    player2.getCardsIntoPlayer(cards);
+                    System.out.println("Player 2: " + player2.getCardlist());
+                    player3.getCardsIntoPlayer(cards);
+                    System.out.println("Player 3: " + player3.getCardlist());
+                    player4.getCardsIntoPlayer(cards);
+                    System.out.println("Player 4: " + player4.getCardlist());
+                    System.out.println();
+
+                    System.out.println("Center  : " + center.getCardlist()); // Show the center card
+
+                    System.out.println("Deck    : " + cards.showCards()); // Show the remaining deck
+
+                    System.out.println("Score   : Player 1 = " + player1.score + " | Player 2 = " + player2.score + " | Player 3 = "
+                    + player3.score + " | Player 4 = " + player4.score);
+
+                    restart = false;
+
+                    // Number of tricks (Rounds)
+                    while (roundCounter <= 13) { // 13 rounds for a full game
+
+                        switch (determineFirstPlayer(center, roundCounter)) {
+                            case 1:
+                                firstPlayer = player1;
+                                firstPlayer.name = "Player 1";
+                                secondPlayer = player2;
+                                secondPlayer.name = "Player 2";
+                                thirdPlayer = player3;
+                                thirdPlayer.name = "Player 3";
+                                fourthPlayer = player4;
+                                fourthPlayer.name = "Player 4";
+                                break;
+
+                            case 2:
+                                firstPlayer = player2;
+                                firstPlayer.name = "Player 2";
+                                secondPlayer = player3;
+                                secondPlayer.name = "Player 3";
+                                thirdPlayer = player4;
+                                thirdPlayer.name = "Player 4";
+                                fourthPlayer = player1;
+                                fourthPlayer.name = "Player 1";
+                                break;
+
+                            case 3:
+                                firstPlayer = player3;
+                                firstPlayer.name = "Player 3";
+                                secondPlayer = player4;
+                                secondPlayer.name = "Player 4";
+                                thirdPlayer = player1;
+                                thirdPlayer.name = "Player 1";
+                                fourthPlayer = player2;
+                                fourthPlayer.name = "Player 2";
+                                break;
+
+                            case 4:
+                                firstPlayer = player4;
+                                firstPlayer.name = "Player 4";
+                                secondPlayer = player1;
+                                secondPlayer.name = "Player 1";
+                                thirdPlayer = player2;
+                                thirdPlayer.name = "Player 2";
+                                fourthPlayer = player3;
+                                fourthPlayer.name = "Player 3";
+                                break;
+
+                            default:
+                                break;
+                        }
+                        if (restart) {
+                            break;
+                        }
+
+                        if (roundCounter != 1) { // Clear out the center deck when starting new round except for first
+                                                 // one.
+                            System.out.println("These are the results from last round.");
+                            Thread.sleep(500);
+                            System.out.print(".");
+                            Thread.sleep(500);
+                            System.out.print(".");
+                            Thread.sleep(500);
+                            System.out.print(".");
+                            System.out.println();
+                            System.out.println(
+                                    "***  " + firstPlayer.name + " won Trick #" + (roundCounter - 1) + "!  ***");
+                            System.out.println();
+                            center.clearCardlist();
+                            defaultScreen(roundCounter, center, cards);
+                        }
+
+                        System.out.println("Player goes first is " + firstPlayer.name); // Determine who goes first
+                        playerTurn(firstPlayer, cards, roundCounter, center);
+                        checkWin(firstPlayer);
+                        if (restart || newRound) {
+                            break;
+                        }
+                        playerTurn(secondPlayer, cards, roundCounter, center);
+                        checkWin(secondPlayer);
+                        if (restart || newRound) {
+                            break;
+                        }
+                        playerTurn(thirdPlayer, cards, roundCounter, center);
+                        checkWin(thirdPlayer);
+                        if (restart || newRound) {
+                            break;
+                        }
+                        playerTurn(fourthPlayer, cards, roundCounter, center);
+                        checkWin(fourthPlayer);
+                        if (restart || newRound) {
+                            break;
+                        }
+
+                        roundCounter++;
+
+                    }
+                    if (roundCounter == 14) {
+                        starter = false;
+                    }
+                } while (!newRound);
+            } while (!restart);
+        } while (starter);
+        System.exit(0);
     }
 }
+
+

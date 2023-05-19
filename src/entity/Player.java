@@ -5,6 +5,9 @@ import java.util.ArrayList;
 public class Player {
     public ArrayList<String> cardlist = new ArrayList<>();
     public String name;
+    public String cardPlayed;
+    public boolean passCard;
+    public int score;
 
     public Player() { 
     }
@@ -27,6 +30,20 @@ public class Player {
             cards.cardslist.remove(0);
             cardlist.add(insertation);
         }
+    }
+
+    public void drawOneCard(Cards cards){
+        if (cards.cardslist.size() > 0) {
+            String card = cards.cardslist.get(0);
+            cards.cardslist.remove(0);
+            cardlist.add(card);
+        }
+        else {
+            System.out.println("There's no more cards in the remaining deck!");
+            System.out.println("Skipping your turn!");
+            passCard = false;
+        }
+
     }
 
     public void addCard(String card) {
@@ -62,12 +79,11 @@ public class Player {
     
             String leadingSuit = leadingCard.substring(0, 1);
             String leadingRank = leadingCard.substring(1);
-
-
+            
             if (suit.equals(leadingSuit) || rank.equals(leadingRank)) {
                 center.cardlist.add(card);
                 removeCard(card);
-                
+                passCard = false;
             } else {
                 System.out.println("You can only play a card with the same suit or rank as the leading card!");
 
@@ -75,8 +91,17 @@ public class Player {
         } else {
             System.out.println("You don't have that card!");
         }
-            
+    }
 
+    public void setupCard(String card, Player center){ //Only use for roundCounter > 2, and first player only
+        if (cardlist.contains(card)) {
+            center.cardlist.add(card);
+            removeCard(card);
+            passCard = false;
+        }
+        else {
+            System.out.println("You don't have that card!");
+        }
     }
 
 
