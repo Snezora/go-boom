@@ -140,6 +140,7 @@ public class Main {
         }
     }
 
+
     public static void defaultScreen(int roundCounter, Player center, Cards cards) {
         System.out.println();
         System.out.println("~ ~ TRICK #" + roundCounter + " ~ ~");

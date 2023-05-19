@@ -11,6 +11,7 @@ public class Player {
 
     public Player() { 
     }
+
     
     public Player(ArrayList<String> cardlist) { //constructor
         this.cardlist = cardlist;
