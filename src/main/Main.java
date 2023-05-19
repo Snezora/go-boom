@@ -205,7 +205,7 @@ public class Main {
         if (player.cardlist.isEmpty()) {
             newRound = true;
             player.score++;
-            System.out.println(player.name + " has won the 1st match!");
+            System.out.println(player.name + " has won this match!");
             System.out.println("Moving onwards to the next match.");
             Thread.sleep(2000);
         } else {
@@ -217,10 +217,22 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         do {
             do {
-                
-
                 Player center = new Player();
-
+                System.out.println("Available commands:");
+                System.out.println("1. s - Start a new game");
+                System.out.println("2. x - Exit the game");
+                System.out.println("3. d - Draw cards from deck");
+                System.out.println("You may type in 'help' or press '?' in the middle of the game to view the commands.");
+                System.out.println("\n");
+                System.out.println("Press Enter key to continue...");
+                try
+                {
+                    System.in.read();
+                    scanner.nextLine();
+                }  
+                catch(Exception e)
+                {
+                }
                 do {
                     Cards cards = new Cards(); // Create the cards (the original deck)
                     int roundCounter = 1;
@@ -233,15 +245,6 @@ public class Main {
                     cards.initialiseCards();
                     cards.shuffleCards();
 
-                    
-                    System.out.println("Available commands:");
-                    System.out.println("1. s - Start a new game");
-                    System.out.println("2. x - Exit the game");
-                    System.out.println("3. d - Draw cards from deck");
-                    System.out.println("You may type in 'help' or press '?' in the middle of the game to view the commands.");
-                    System.out.println("\n");
-                    System.out.println("Press any button to continue...");
-                    scanner.nextLine();
 
                     // Get the center card first
                     center.addCard(cards.getLeadingCard());
