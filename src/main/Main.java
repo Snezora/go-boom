@@ -43,21 +43,6 @@ public class Main {
             previousFirstPlayer = result;
         } else {
 
-            // This would find the player that played the highest rank car of the same suit
-            // as the lead card
-            // String leadCardSuit = center.cardlist.get(0).substring(0, 1);
-            // int highestRank = -1;
-            // for (int i = 0; i < 4; i++) {
-            // Player currentPlayer = getPlayerByNumber((previousFirstPlayer + i) % 4 + 1);
-            // String currentCard = currentPlayer.cardlist.get(0);
-            // String currentCardSuit = currentCard.substring(0, 1);
-            // String currentCardNumber = currentCard.substring(1);
-            // if (currentCardSuit.equals(leadCardSuit) && getCardRank(currentCardNumber) >
-            // highestRank) {
-            // highestRank = getCardRank(currentCardNumber);
-            // result = (previousFirstPlayer + i) % 4 + 1;
-            // }
-            // }
             String leadCardSuit = center.cardlist.get(0).substring(0, 1);
             String leadCardRank = center.cardlist.get(0).substring(1, 2);
             int highestRank = -1;
@@ -160,6 +145,7 @@ public class Main {
         String playedcards;
         player.passCard = true;
         while (player.passCard == true) {
+
             System.out.print(player.name + "> "); // ! Notice here how I used firstPlayer.name, which will make our job
                                                   // easier
             playedcards = scanner.nextLine(); // Get the card played by the player
@@ -179,12 +165,15 @@ public class Main {
                 System.out.print(".");
                 System.out.println();
             } else if (playedcards.equals("help") || playedcards.equals("?")) {
+                System.out.println();
                 System.out.println("============================");
                 System.out.println("Available commands:");
                 System.out.println("1. s - Start a new game");
                 System.out.println("2. x - Exit the game");
                 System.out.println("3. d - Draw cards from deck");
                 System.out.println("============================");
+                System.out.println();
+                defaultScreen(roundCounter, center, cards);
             } else if (playedcards.equals("x")) {
                 System.out.println("Thanks for playing!");
                 Thread.sleep(1500);
@@ -243,7 +232,11 @@ public class Main {
                     player4.clearCardlist();
                     center.clearCardlist();
                     cards.initialiseCards();
+                    System.out.println("Cards initialised: " + cards.showCards());
+                    System.out.println();
                     cards.shuffleCards();
+                    System.out.println("Cards shuffled: " + cards.showCards());
+                    System.out.println();
 
 
                     // Get the center card first
@@ -251,14 +244,11 @@ public class Main {
                     System.out.println();
                     System.out.println("~ ~ TRICK #" + roundCounter + " ~ ~");
 
-                    // Get the 7 front cards of the deck into players hands
-                    player1.getCardsIntoPlayer(cards);
+                    cards.getCardsIntoPlayer(cards, player1, player2, player3,player4);
+
                     System.out.println("Player 1: " + player1.getCardlist());
-                    player2.getCardsIntoPlayer(cards);
                     System.out.println("Player 2: " + player2.getCardlist());
-                    player3.getCardsIntoPlayer(cards);
                     System.out.println("Player 3: " + player3.getCardlist());
-                    player4.getCardsIntoPlayer(cards);
                     System.out.println("Player 4: " + player4.getCardlist());
                     System.out.println();
 

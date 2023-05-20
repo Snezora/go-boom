@@ -26,6 +26,7 @@ public class Player {
     }
 
     public void getCardsIntoPlayer(Cards cards){ //! Only use this when first round for initialisation!
+        //THIS IS USELESS
         for (int i = 0; i < 7; i++) {
             String insertation = cards.cardslist.get(0);
             cards.cardslist.remove(0);

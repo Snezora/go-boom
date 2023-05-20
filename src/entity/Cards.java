@@ -69,6 +69,33 @@ public class Cards {
         Random rng = new Random();
         Collections.shuffle(cardslist, rng);
     }
+
+    public void getCardsIntoPlayer(Cards cards, Player player1, Player player2, Player player3, Player player4){ //! Only use this when first round for initialisation!
+        while (player1.cardlist.size() != 7 || player2.cardlist.size() != 7 || player3.cardlist.size() != 7 || player4.cardlist.size() != 7) {
+            for (int i = 0; i < 4; i++) {
+                switch (i) {
+                    case 0:
+                    player1.addCard(cards.getAndRemoveCard(0));
+                    break;
+
+                    case 1:
+                    player2.addCard(cards.getAndRemoveCard(0));
+                    break;
+
+                    case 2:
+                    player3.addCard(cards.getAndRemoveCard(0));
+                    break;
+
+                    case 3:
+                    player4.addCard(cards.getAndRemoveCard(0));
+                    break;
+                
+                    default:
+                        break;
+                }
+            }
+        }
+    }
     
 
     public String showCards(){
