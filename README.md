@@ -5,7 +5,7 @@
 No | ID         |         Name         | Task descriptions | Contribution %
 -- | ---------- | -------------------- | ----------------- | --------------
 1  | 1221302721 | Lester Liew Jun Min  | Make sure cards are faced upwards, cards are shuffled before dealt to players, setup the basis of code| 40%
-2  | 1201103427 |   Hong Yoong Shem    |                   |    20%
+2  | 1201103427 |   Hong Yoong Shem    |                   |    25%
 3  | 1221303291 |Nurul Balqis binti Ridzuwan|                   |
 4  |            |                      |                   |
 
