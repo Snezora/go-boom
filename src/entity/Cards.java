@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+
+
 public class Cards {
+    private ICard[] cardings = new ICard[52];
     public ArrayList<String> cardslist = new ArrayList<>();
     
     public Cards(){
@@ -12,25 +15,25 @@ public class Cards {
     }
 
     public void initialiseCards(){
-        //Do Shapes First
-        for (int shape = 0; shape < 4; shape++) {
-            // Shape 0 = Clubs, Shape 1 = Diamonds, Shape 2 = Hearts, Shape 3 = Spades
-            String shapeLetter = "";
-            switch (shape) {
+        //Do Suits First
+        for (int suit = 0; suit < 4; suit++) {
+            // Suit 0 = Clubs, Suit 1 = Diamonds, Suit 2 = Hearts, Suit 3 = Spades
+            String suitLetter = "";
+            switch (suit) {
                 case 0:
-                    shapeLetter = "c";
+                    suitLetter = "c";
                     break;
 
                 case 1:
-                    shapeLetter = "d";
+                    suitLetter = "d";
                     break;
 
                 case 2:
-                    shapeLetter = "h";
+                    suitLetter = "h";
                     break;
 
                 case 3:
-                    shapeLetter = "s";
+                    suitLetter = "s";
                     break;
             
                 default:
@@ -41,22 +44,22 @@ public class Cards {
             for (int i = 1; i <= 13; i++) {
                 String card;
                 if (i == 1) {
-                    card = shapeLetter + "A";
+                    card = suitLetter + "A";
                 }
                 else if (i == 10) {
-                    card = shapeLetter + "X";
+                    card = suitLetter + "X";
                 }
                 else if (i == 11) {
-                    card = shapeLetter + "J";
+                    card = suitLetter + "J";
                 }
                 else if (i == 12) {
-                    card = shapeLetter + "Q";
+                    card = suitLetter + "Q";
                 }
                 else if (i == 13) {
-                    card = shapeLetter + "K";
+                    card = suitLetter + "K";
                 }
                 else {
-                    card = shapeLetter + i;
+                    card = suitLetter + i;
                 }
                 cardslist.add(card);
             }
@@ -70,29 +73,10 @@ public class Cards {
         Collections.shuffle(cardslist, rng);
     }
 
-    public void getCardsIntoPlayer(Cards cards, Player player1, Player player2, Player player3, Player player4){ //! Only use this when first round for initialisation!
-        while (player1.cardlist.size() != 7 || player2.cardlist.size() != 7 || player3.cardlist.size() != 7 || player4.cardlist.size() != 7) {
+    public void getCardsIntoPlayer(Cards cards, Player[] players){ //! Only use this when first round for initialisation!
+        while (players[0].cardlist.size() != 7 || players[1].cardlist.size() != 7 || players[2].cardlist.size() != 7 || players[3].cardlist.size() != 7) {
             for (int i = 0; i < 4; i++) {
-                switch (i) {
-                    case 0:
-                    player1.addCard(cards.getAndRemoveCard(0));
-                    break;
-
-                    case 1:
-                    player2.addCard(cards.getAndRemoveCard(0));
-                    break;
-
-                    case 2:
-                    player3.addCard(cards.getAndRemoveCard(0));
-                    break;
-
-                    case 3:
-                    player4.addCard(cards.getAndRemoveCard(0));
-                    break;
-                
-                    default:
-                        break;
-                }
+                players[i].addCard(cards.getAndRemoveCard(0));
             }
         }
     }

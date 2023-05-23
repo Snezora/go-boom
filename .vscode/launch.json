@@ -1,6 +1,14 @@
 {
     "console": "externalTerminal",
     "configurations": [
+        
+        {
+            "type": "java",
+            "name": "Game",
+            "request": "launch",
+            "mainClass": "main.Game",
+            "projectName": "go-boom_a11e4d26"
+        },
         {
             "type": "java",
             "name": "Main",
