@@ -2,17 +2,14 @@ package main;
 import java.io.File;
 import java.io.FileInputStream;
 
-import javax.print.DocFlavor.URL;
-
 import javafx.application.*;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.fxml.*;
 
 
 public class Game extends Application{
@@ -35,9 +32,9 @@ public class Game extends Application{
 
         Image card = new Image(getClass().getResource("../lib/cards/cA.png").toString());
         ImageView image = new ImageView(card);
-        image.autosize();
+        image.setScaleX(0.2);
+        image.setScaleY(0.2);
 
-        pane.add(image, 0, 0);
         root.getChildren().add(image);
 
         stage.setScene(scene);
