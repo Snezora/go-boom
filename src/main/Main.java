@@ -186,6 +186,10 @@ public class Main {
                     players[i].name = "Player " + (i + 1);
                 }
 
+
+                System.out.println("                      ===============================");
+                System.out.println("                      --->  WECLOME TO GO BOOM  <---");
+                System.out.println("                      ===============================");
                 System.out.println("Available commands:");
                 System.out.println("1. s - Start a new game");
                 System.out.println("2. x - Exit the game");
