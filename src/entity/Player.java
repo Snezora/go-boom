@@ -106,5 +106,9 @@ public class Player {
         }
     }
 
+
+    public void loadCardlistFromString(String centerCardString) {
+    }
+
     
 }

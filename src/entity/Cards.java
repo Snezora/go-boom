@@ -7,7 +7,7 @@ import java.util.Random;
 
 
 public class Cards {
-    private ICard[] cardings = new ICard[52];
+    //private ICard[] cardings = new ICard[52];
     public ArrayList<String> cardslist = new ArrayList<>();
     
     public Cards(){
@@ -97,6 +97,9 @@ public class Cards {
 
     public String getLeadingCard() {
         return getAndRemoveCard(0);
+    }
+
+    public void loadCardsFromString(String deckString) {
     }
 
     
