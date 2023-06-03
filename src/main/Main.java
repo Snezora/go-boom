@@ -42,6 +42,45 @@ public class Main {
     // Create the cards (the original deck)
     static Cards cards = new Cards();
 
+    public static void saveGameState(String fileName, Player center, Cards cards, int roundCounter, Player[] players) {
+        Path filePath = Path.of(fileName);
+
+        try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
+            // Save center card
+            writer.write("Center Card: " + center.getCardlist().toString());
+            writer.newLine();
+
+            // Save remaining deck
+            writer.write("Remaining Deck: " + cards.showCards());
+            writer.newLine();
+
+            // Save player cards
+            for (Player player : players) {
+                writer.write(player.name + " Cards: " + player.getCardlist().toString());
+                writer.newLine();
+            }
+
+            // Save round counter
+            writer.write("Round Counter: " + roundCounter);
+            writer.newLine();
+
+            // Save scoring system
+            StringBuilder scoreString = new StringBuilder();
+            scoreString.append("Score: ");
+            for (int i = 0; i < players.length; i++) {
+                scoreString.append("Player ").append(i + 1).append(" = ").append(players[i].score).append(" | ");
+            }
+            scoreString.delete(scoreString.length() - 3, scoreString.length());
+            writer.write(scoreString.toString());
+            writer.newLine();
+
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
 
     private void loadImages() {
         for (int i = 0; i < cards.cardslist.size(); i++) {
@@ -194,8 +233,11 @@ public class Main {
             newRound = false;
         }
     }
+    
 
     public static void main(String[] args) throws InterruptedException {
+
+ 
         do {
             do {
                 Player center = new Player();
