@@ -8,6 +8,7 @@ public class Player implements Serializable {
     public String name;
     public Card cardPlayed;
     public boolean passCard;
+    public boolean turnEnd = false;
     public int score;
 
     public Player() { 

@@ -37,6 +37,7 @@ public class GameActivity extends AppCompatActivity {
     static int previousFirstPlayer;
     static boolean starter = true;
     static boolean restart = false;
+    static boolean lock = false;
     static volatile boolean newRound = false;
 
     static CountDownLatch latch;
@@ -44,6 +45,7 @@ public class GameActivity extends AppCompatActivity {
 
     // Array to store players and center
     static Player center = new Player();
+    static int takeCounter = 1;
     static Cards cards = new Cards();
     static Player firstPlayer = null, secondPlayer = null, thirdPlayer = null, fourthPlayer = null;
     static Player[] players = new Player[4];
@@ -125,7 +127,7 @@ public class GameActivity extends AppCompatActivity {
         String cardNumber;
         Card card;
         int result = 0;
-        if (roundCounter <= 1) {
+        if (roundCounter <= 1 && !lock) {
             card = center.cardlist.get(0);
             cardNumber = card.getCardRank().getNumberString();
             switch (cardNumber) {
@@ -177,24 +179,24 @@ public class GameActivity extends AppCompatActivity {
         return result;
     }
 
-    public static boolean checkWin() {
-        boolean truth = false;
-        for (Player player : players) {
-            if (player.cardlist.isEmpty()) {
-                newRound = true;
-                player.score++;
-                truth = true;
-            } else {
-                newRound = false;
-            }
-        }
-        return truth;
-    }
+//    public static boolean checkWin() {
+//        boolean truth = false;
+//        for (Player player : players) {
+//            if (player.cardlist.isEmpty()) {
+//                newRound = true;
+//                player.score++;
+//                truth = true;
+//            } else {
+//                newRound = false;
+//            }
+//        }
+//        return truth;
+//    }
 
 
     public static void printOutput() {
         Log.d("Output", "-------------------------------");
-        Log.d("Output", "Round " + roundCounter);
+        Log.d("Output", "Round " + takeCounter);
         Log.d("Output", "Player who goes first = " + firstPlayer.name);
         Log.d("Output", "Player 1 Cards = " + players[0].printCardlist());
         Log.d("Output", "Player 2 Cards = " + players[1].printCardlist());
@@ -229,9 +231,50 @@ public class GameActivity extends AppCompatActivity {
         }
 
         TextView roundCounterText = findViewById(R.id.roundCounterText);
-        roundCounter = 1;
 
-        roundCounterText.setText("Round " + roundCounter);
+        roundCounterText.setText("Round " + takeCounter);
+        startGame();
+
+
+// if (playerNumber == 0) {
+// currentPlayer = firstPlayer;
+// }
+// if (playerNumber == 1) {
+// currentPlayer = secondPlayer;
+// }
+// if (playerNumber == 2) {
+// currentPlayer = thirdPlayer;
+// }
+// if (playerNumber == 3) {
+// currentPlayer = fourthPlayer;
+// }
+// if (playerNumber >= 4) {
+// playerNumber = 0;
+// }
+//
+// playerCardScreen(currentPlayer);
+// printOutput();
+// playerTurnText.setText("Playing now: " + currentPlayer.name);
+// Thread.yield();
+
+        GameThread game = new GameThread();
+        game.run();
+
+
+
+// currentPlayer = secondPlayer;
+// playerCardScreen(secondPlayer);
+// playerTurnText.setText("Playing now: " + secondPlayer.name);
+
+
+    }
+
+    public void startGame(){
+        TextView playerScoreText = findViewById(R.id.playerScoresText);
+        Resources res = getResources(); // get a reference to the resources object
+        TextView roundCounterText = findViewById(R.id.roundCounterText);
+
+        roundCounterText.setText("Round " + takeCounter);
 
         // Create the cards for playing
         for (Player player : players) {
@@ -244,6 +287,8 @@ public class GameActivity extends AppCompatActivity {
             int resId = res.getIdentifier(card.cardName().toLowerCase(), "drawable", getPackageName());
             cardIntegerHashMap.put(card, resId);
         }
+
+        playerScoreText.setText("Scores = Player 1: " + players[0].score + " | Player 2: " + players[1].score + " | Player 3: " + players[2].score + " | Player 4: " + players[3].score);
 
         cards.shuffleCards();
 
@@ -312,56 +357,25 @@ public class GameActivity extends AppCompatActivity {
         }
 
         getCardsIntoCenter(center);
-// if (playerNumber == 0) {
-// currentPlayer = firstPlayer;
-// }
-// if (playerNumber == 1) {
-// currentPlayer = secondPlayer;
-// }
-// if (playerNumber == 2) {
-// currentPlayer = thirdPlayer;
-// }
-// if (playerNumber == 3) {
-// currentPlayer = fourthPlayer;
-// }
-// if (playerNumber >= 4) {
-// playerNumber = 0;
-// }
-//
-// playerCardScreen(currentPlayer);
-// printOutput();
-// playerTurnText.setText("Playing now: " + currentPlayer.name);
-// Thread.yield();
-
-        GameThread game = new GameThread();
-        game.run();
-
-
-
-// currentPlayer = secondPlayer;
-// playerCardScreen(secondPlayer);
-// playerTurnText.setText("Playing now: " + secondPlayer.name);
-
-
     }
 
-    class WinThread implements Runnable {
-        @Override
-        public void run() {
-            mainHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    while (!newRound){
-                        checkWin();
-                    }
-                    if (newRound) {
-                        roundCounter++;
-                        recreate();
-                    }
-                }
-            });
-        }
-    }
+//    class WinThread implements Runnable {
+//        @Override
+//        public void run() {
+//            mainHandler.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    while (!newRound){
+//                        checkWin();
+//                    }
+//                    if (newRound) {
+//                        roundCounter++;
+//                        recreate();
+//                    }
+//                }
+//            });
+//        }
+//    }
 
 
     class GameThread implements Runnable {
@@ -374,6 +388,7 @@ public class GameActivity extends AppCompatActivity {
                 public void run() {
                     if (roundCounter == 1) {
                         if (center.cardlist.size() == 5) {
+                            lock = true;
                             playerTurnList.clear();
                             switch (determineFirstPlayer(center, roundCounter)) {
                                 case 1:
@@ -447,31 +462,119 @@ public class GameActivity extends AppCompatActivity {
                             }
 
                             playerCardScreen(currentPlayer);
+                            for (Player player: players) {
+                                player.turnEnd = false;
+                            }
                             printOutput();
                             playerTurnText.setText("Playing now: " + currentPlayer.name);
                             Thread.yield();
                         } else {
-                            if (playerNumber == 0) {
-                                currentPlayer = firstPlayer;
-                            }
-                            if (playerNumber == 1) {
-                                currentPlayer = secondPlayer;
-                            }
-                            if (playerNumber == 2) {
-                                currentPlayer = thirdPlayer;
-                            }
-                            if (playerNumber == 3) {
-                                currentPlayer = fourthPlayer;
-                            }
-                            if (playerNumber >= 4) {
-                                playerNumber = 0;
-                                GameThread.this.run();
-                            }
+                            if (players[0].turnEnd && players[1].turnEnd && players[2].turnEnd && players[3].turnEnd) {
+                                playerTurnList.clear();
+                                switch (determineFirstPlayer(center, roundCounter)) {
+                                    case 1:
+                                        firstPlayer = players[0];
+                                        secondPlayer = players[1];
+                                        thirdPlayer = players[2];
+                                        fourthPlayer = players[3];
+                                        playerTurnList.add(firstPlayer);
+                                        playerTurnList.add(secondPlayer);
+                                        playerTurnList.add(thirdPlayer);
+                                        playerTurnList.add(fourthPlayer);
+                                        break;
 
-                            playerCardScreen(currentPlayer);
-                            printOutput();
-                            playerTurnText.setText("Playing now: " + currentPlayer.name);
-                            Thread.yield();
+                                    case 2:
+                                        firstPlayer = players[1];
+                                        secondPlayer = players[2];
+                                        thirdPlayer = players[3];
+                                        fourthPlayer = players[0];
+                                        playerTurnList.add(firstPlayer);
+                                        playerTurnList.add(secondPlayer);
+                                        playerTurnList.add(thirdPlayer);
+                                        playerTurnList.add(fourthPlayer);
+                                        break;
+
+                                    case 3:
+                                        firstPlayer = players[2];
+                                        secondPlayer = players[3];
+                                        thirdPlayer = players[0];
+                                        fourthPlayer = players[1];
+                                        playerTurnList.add(firstPlayer);
+                                        playerTurnList.add(secondPlayer);
+                                        playerTurnList.add(thirdPlayer);
+                                        playerTurnList.add(fourthPlayer);
+                                        break;
+
+                                    case 4:
+                                        firstPlayer = players[3];
+                                        secondPlayer = players[0];
+                                        thirdPlayer = players[1];
+                                        fourthPlayer = players[2];
+                                        playerTurnList.add(firstPlayer);
+                                        playerTurnList.add(secondPlayer);
+                                        playerTurnList.add(thirdPlayer);
+                                        playerTurnList.add(fourthPlayer);
+                                        break;
+
+                                    default:
+                                        break;
+
+                                }
+                                center.cardlist.clear();
+                                getCardsIntoCenter(center);
+                                Log.d("Output", "A new round has begun!");
+                                roundCounter++;
+                                // Determine who goes first
+                                if (playerNumber == 0) {
+                                    currentPlayer = firstPlayer;
+                                }
+                                if (playerNumber == 1) {
+                                    currentPlayer = secondPlayer;
+                                }
+                                if (playerNumber == 2) {
+                                    currentPlayer = thirdPlayer;
+                                }
+                                if (playerNumber == 3) {
+                                    currentPlayer = fourthPlayer;
+                                }
+                                if (playerNumber >= 4) {
+                                    playerNumber = 0;
+                                    GameThread.this.run();
+                                }
+
+                                playerCardScreen(currentPlayer);
+                                for (Player player: players) {
+                                    player.turnEnd = false;
+                                }
+                                printOutput();
+                                playerTurnText.setText("Playing now: " + currentPlayer.name);
+                                Thread.yield();
+                            } else {
+                                if (playerNumber == 0) {
+                                    currentPlayer = firstPlayer;
+                                }
+                                if (playerNumber == 1) {
+                                    currentPlayer = secondPlayer;
+                                }
+                                if (playerNumber == 2) {
+                                    currentPlayer = thirdPlayer;
+                                }
+                                if (playerNumber == 3) {
+                                    currentPlayer = fourthPlayer;
+                                }
+                                if (playerNumber >= 4) {
+                                    playerNumber = 0;
+                                    GameThread.this.run();
+                                }
+
+                                playerCardScreen(currentPlayer);
+                                for (Player player: players) {
+                                    player.turnEnd = false;
+                                }
+                                printOutput();
+                                playerTurnText.setText("Playing now: " + currentPlayer.name);
+                                Thread.yield();
+                            }
                         }
                     } else {
                         if (center.cardlist.size() == 4) {
@@ -548,37 +651,144 @@ public class GameActivity extends AppCompatActivity {
                             }
 
                             playerCardScreen(currentPlayer);
+                            for (Player player: players) {
+                                player.turnEnd = false;
+                            }
                             printOutput();
                             playerTurnText.setText("Playing now: " + currentPlayer.name);
                             Thread.yield();
                         } else {
-                            // Determine who goes first
-                            if (playerNumber == 0) {
-                                currentPlayer = firstPlayer;
-                            }
-                            if (playerNumber == 1) {
-                                currentPlayer = secondPlayer;
-                            }
-                            if (playerNumber == 2) {
-                                currentPlayer = thirdPlayer;
-                            }
-                            if (playerNumber == 3) {
-                                currentPlayer = fourthPlayer;
-                            }
-                            if (playerNumber >= 4) {
-                                playerNumber = 0;
-                                GameThread.this.run();
-                            }
+                            if (players[0].turnEnd && players[1].turnEnd && players[2].turnEnd && players[3].turnEnd) {
+                                playerTurnList.clear();
+                                switch (determineFirstPlayer(center, roundCounter)) {
+                                    case 1:
+                                        firstPlayer = players[0];
+                                        secondPlayer = players[1];
+                                        thirdPlayer = players[2];
+                                        fourthPlayer = players[3];
+                                        playerTurnList.add(firstPlayer);
+                                        playerTurnList.add(secondPlayer);
+                                        playerTurnList.add(thirdPlayer);
+                                        playerTurnList.add(fourthPlayer);
+                                        break;
 
-                            playerCardScreen(currentPlayer);
-                            printOutput();
-                            playerTurnText.setText("Playing now: " + currentPlayer.name);
-                            Thread.yield();
+                                    case 2:
+                                        firstPlayer = players[1];
+                                        secondPlayer = players[2];
+                                        thirdPlayer = players[3];
+                                        fourthPlayer = players[0];
+                                        playerTurnList.add(firstPlayer);
+                                        playerTurnList.add(secondPlayer);
+                                        playerTurnList.add(thirdPlayer);
+                                        playerTurnList.add(fourthPlayer);
+                                        break;
+
+                                    case 3:
+                                        firstPlayer = players[2];
+                                        secondPlayer = players[3];
+                                        thirdPlayer = players[0];
+                                        fourthPlayer = players[1];
+                                        playerTurnList.add(firstPlayer);
+                                        playerTurnList.add(secondPlayer);
+                                        playerTurnList.add(thirdPlayer);
+                                        playerTurnList.add(fourthPlayer);
+                                        break;
+
+                                    case 4:
+                                        firstPlayer = players[3];
+                                        secondPlayer = players[0];
+                                        thirdPlayer = players[1];
+                                        fourthPlayer = players[2];
+                                        playerTurnList.add(firstPlayer);
+                                        playerTurnList.add(secondPlayer);
+                                        playerTurnList.add(thirdPlayer);
+                                        playerTurnList.add(fourthPlayer);
+                                        break;
+
+                                    default:
+                                        break;
+
+                                }
+                                center.cardlist.clear();
+                                getCardsIntoCenter(center);
+                                Log.d("Output", "A new round has begun!");
+                                roundCounter++;
+                                // Determine who goes first
+                                if (playerNumber == 0) {
+                                    currentPlayer = firstPlayer;
+                                }
+                                if (playerNumber == 1) {
+                                    currentPlayer = secondPlayer;
+                                }
+                                if (playerNumber == 2) {
+                                    currentPlayer = thirdPlayer;
+                                }
+                                if (playerNumber == 3) {
+                                    currentPlayer = fourthPlayer;
+                                }
+                                if (playerNumber >= 4) {
+                                    playerNumber = 0;
+                                    GameThread.this.run();
+                                }
+
+                                playerCardScreen(currentPlayer);
+                                for (Player player: players) {
+                                    player.turnEnd = false;
+                                }
+                                printOutput();
+                                playerTurnText.setText("Playing now: " + currentPlayer.name);
+                                Thread.yield();
+                            } else {
+                                // Determine who goes first
+                                if (playerNumber == 0) {
+                                    currentPlayer = firstPlayer;
+                                }
+                                if (playerNumber == 1) {
+                                    currentPlayer = secondPlayer;
+                                }
+                                if (playerNumber == 2) {
+                                    currentPlayer = thirdPlayer;
+                                }
+                                if (playerNumber == 3) {
+                                    currentPlayer = fourthPlayer;
+                                }
+                                if (playerNumber >= 4) {
+                                    playerNumber = 0;
+                                    GameThread.this.run();
+                                }
+
+                                playerCardScreen(currentPlayer);
+                                for (Player player: players) {
+                                    player.turnEnd = false;
+                                }
+                                printOutput();
+                                playerTurnText.setText("Playing now: " + currentPlayer.name);
+                                Thread.yield();
+                            }
                         }
                     }
 
                 }
             });
+        }
+    }
+
+    public void seeIfWin(){
+        if (currentPlayer.cardlist.size() == 0) {
+            if (currentPlayer.equals(players[0])) {
+                players[0].score++;
+            }
+            if (currentPlayer.equals(players[1])) {
+                players[1].score++;
+            }
+            if (currentPlayer.equals(players[2])) {
+                players[2].score++;
+            }
+            if (currentPlayer.equals(players[3])) {
+                players[3].score++;
+            }
+            takeCounter++;
+            startGame();
         }
     }
 
@@ -609,15 +819,19 @@ public class GameActivity extends AppCompatActivity {
                         Log.d("Output", currentPlayer.name + " has played " + selectedCard.cardName());
                         if (currentPlayer.equals(players[0])) {
                             players[0].cardPlayed = selectedCard;
+                            players[0].turnEnd = true;
                         }
                         if (currentPlayer.equals(players[1])) {
                             players[1].cardPlayed = selectedCard;
+                            players[1].turnEnd = true;
                         }
                         if (currentPlayer.equals(players[2])) {
                             players[2].cardPlayed = selectedCard;
+                            players[2].turnEnd = true;
                         }
                         if (currentPlayer.equals(players[3])) {
                             players[3].cardPlayed = selectedCard;
+                            players[3].turnEnd = true;
                         }
                     } else {
                         Toast.makeText(this, "You must play the same rank or suit as the first card played!", Toast.LENGTH_SHORT).show();
@@ -633,6 +847,7 @@ public class GameActivity extends AppCompatActivity {
                         selectedView.setVisibility(View.GONE);
                         selectedView.setTag(null);
                         assert selectedCard != null;
+                        seeIfWin();
                     }
                 }
 
@@ -660,15 +875,19 @@ public class GameActivity extends AppCompatActivity {
                     Log.d("Output", currentPlayer.name + " has played " + selectedCard.cardName());
                     if (currentPlayer.equals(players[0])) {
                         players[0].cardPlayed = selectedCard;
+                        players[0].turnEnd = true;
                     }
                     if (currentPlayer.equals(players[1])) {
                         players[1].cardPlayed = selectedCard;
+                        players[1].turnEnd = true;
                     }
                     if (currentPlayer.equals(players[2])) {
                         players[2].cardPlayed = selectedCard;
+                        players[2].turnEnd = true;
                     }
                     if (currentPlayer.equals(players[3])) {
                         players[3].cardPlayed = selectedCard;
+                        players[3].turnEnd = true;
                     }
                 }
 
@@ -680,6 +899,7 @@ public class GameActivity extends AppCompatActivity {
                     selectedView.setVisibility(View.GONE);
                     selectedView.setTag(null);
                     assert selectedCard != null;
+                    seeIfWin();
                 }
 
                 // Update the UI elements and refresh whole program.
@@ -706,15 +926,19 @@ public class GameActivity extends AppCompatActivity {
                         Log.d("Output", currentPlayer.name + " has played " + selectedCard.cardName());
                         if (currentPlayer.equals(players[0])) {
                             players[0].cardPlayed = selectedCard;
+                            players[0].turnEnd = true;
                         }
                         if (currentPlayer.equals(players[1])) {
                             players[1].cardPlayed = selectedCard;
+                            players[1].turnEnd = true;
                         }
                         if (currentPlayer.equals(players[2])) {
                             players[2].cardPlayed = selectedCard;
+                            players[2].turnEnd = true;
                         }
                         if (currentPlayer.equals(players[3])) {
                             players[3].cardPlayed = selectedCard;
+                            players[3].turnEnd = true;
                         }
                     } else {
                         Toast.makeText(this, "You must play the same rank or suit as the first card played!", Toast.LENGTH_SHORT).show();
@@ -730,7 +954,7 @@ public class GameActivity extends AppCompatActivity {
                         selectedView.setVisibility(View.GONE);
                         selectedView.setTag(null);
                         assert selectedCard != null;
-                        //I want the game to end here, and then restart from beginning, but this time with this player's score + 1
+                        seeIfWin();
                     }
                 }
 
@@ -758,6 +982,10 @@ public class GameActivity extends AppCompatActivity {
             gameMenu.bringToFront();
             Button playButton = findViewById(R.id.playButton);
             Button cancelPlayButton = findViewById(R.id.cancelPlayButton);
+            Button drawCard1 = findViewById(R.id.drawCardB1);
+            Button drawCard2 = findViewById(R.id.drawCardB2);
+            drawCard1.setVisibility(View.GONE);
+            drawCard2.setVisibility(View.GONE);
             playButton.setVisibility(View.INVISIBLE);
             cancelPlayButton.setVisibility(View.INVISIBLE);
         }
@@ -769,6 +997,10 @@ public class GameActivity extends AppCompatActivity {
             gameMenu.setVisibility(View.GONE);
             Button playButton = findViewById(R.id.playButton);
             Button cancelPlayButton = findViewById(R.id.cancelPlayButton);
+            Button drawCard1 = findViewById(R.id.drawCardB1);
+            Button drawCard2 = findViewById(R.id.drawCardB2);
+            drawCard1.setVisibility(View.VISIBLE);
+            drawCard2.setVisibility(View.VISIBLE);
             playButton.setVisibility(View.VISIBLE);
             cancelPlayButton.setVisibility(View.VISIBLE);
         }
@@ -776,6 +1008,18 @@ public class GameActivity extends AppCompatActivity {
         public void drawCard(View v) {
             if (cards.cardslist.size() == 0) {
                 Log.d("Output", currentPlayer.name + " has tried to draw a card but there's no cards left!");
+                if (currentPlayer.equals(players[0])) {
+                    players[0].turnEnd = true;
+                }
+                if (currentPlayer.equals(players[1])) {
+                    players[1].turnEnd = true;
+                }
+                if (currentPlayer.equals(players[2])) {
+                    players[2].turnEnd = true;
+                }
+                if (currentPlayer.equals(players[3])) {
+                    players[3].turnEnd = true;
+                }
                 playerNumber++;
                 GameThread game = new GameThread();
                 game.run();
