@@ -1,8 +1,9 @@
 package com.example.goboom.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Player {
+public class Player implements Serializable {
     public ArrayList<Card> cardlist = new ArrayList<>();
     public String name;
     public Card cardPlayed;
@@ -54,8 +55,7 @@ public class Player {
         StringBuilder string = new StringBuilder();
         string.append("[");
         for (int i = 0; i < cardlist.size(); i++) {
-            string.append(cardlist.get(i).getCardSuit().getName());
-            string.append(cardlist.get(i).getCardRank().getNumberString());
+            string.append(cardlist.get(i).cardName());
             string.append(",");
             string.append(" ");
         }

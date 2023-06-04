@@ -13,6 +13,13 @@ public class Card {
         this.cardRank = rank;
     }
 
+    public String cardName() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(getCardSuit().getName());
+        stringBuilder.append(getCardRank().getNumberString());
+        return stringBuilder.toString();
+    }
+
 
     public Suit getCardSuit(){
         return cardSuit;

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.goboom.HoverImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="80dp"
+    android:layout_height="105dp"
+    android:layout_gravity="center"
+    android:layout_marginEnd="-40dp"
+    style="@style/myImageView"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:foregroundGravity="center"
+    android:padding="5dp"
+    android:scaleType="fitXY"
+    android:src="@drawable/cardback"
+    app:layout_anchorGravity="center" />

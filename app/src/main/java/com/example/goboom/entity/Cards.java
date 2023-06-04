@@ -60,8 +60,7 @@ public class Cards{
         StringBuilder string = new StringBuilder();
         string.append("[");
         for (int i = 0; i < cardslist.size(); i++) {
-            string.append(cardslist.get(i).getCardSuit().getName());
-            string.append(cardslist.get(i).getCardRank().getNumberString());
+            string.append(cardslist.get(i).cardName());
             string.append(",");
             string.append(" ");
         }

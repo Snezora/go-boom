@@ -2,11 +2,18 @@ package com.example.goboom;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ApplicationExitInfo;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
+
+import java.util.Timer;
 
 public class MainActivity extends AppCompatActivity {
+
+    int clicks = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,5 +31,18 @@ public class MainActivity extends AppCompatActivity {
 
     public void help_backbutton(View view) {
         setContentView(R.layout.main_menu);
+    }
+
+    public void exitButton(View view) {
+        clicks++;
+        Toast.makeText(this, "Press Exit again to Exit", Toast.LENGTH_SHORT).show();
+        if (clicks == 2) {
+           finish();
+        }
+    }
+
+    public void launchGame(View v) {
+        Intent i = new Intent(this, GameActivity.class);
+        startActivity(i);
     }
 }
