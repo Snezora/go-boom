@@ -38,6 +38,8 @@ public class Main {
     static final String RESTART = "s";
     static final String HELP = "help";
     static final String EXIT = "x";
+    static final String SAVE = "save";
+    static final String LOAD = "load";
 
     // Create the cards (the original deck)
     static Cards cards = new Cards();
@@ -47,16 +49,16 @@ public class Main {
 
         try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
             // Save center card
-            writer.write("Center Card: " + center.getCardlist().toString());
+            writer.write("Center Card: " + center.printCardlist());
             writer.newLine();
 
             // Save remaining deck
-            writer.write("Remaining Deck: " + cards.showCards());
+            writer.write("Remaining Deck: " + cards.printCardlist());
             writer.newLine();
 
             // Save player cards
             for (Player player : players) {
-                writer.write(player.name + " Cards: " + player.getCardlist().toString());
+                writer.write(player.name + " Cards: " + player.printCardlist());
                 writer.newLine();
             }
 
@@ -80,15 +82,62 @@ public class Main {
             e.printStackTrace();
         }
     }
-    
 
-    private void loadImages() {
-        for (int i = 0; i < cards.cardslist.size(); i++) {
-            String filename = cards.cardslist.get(i).substring(0, 2);
-            imageCache.put(filename, new Image(this.getClass().getResourceAsStream("/lib/cards/" + filename + ".png")));
+    public static void loadGameState(String fileName, Player center, Cards cards, int roundCounter, Player[] players) {
+        Path filePath = Path.of(fileName);
+
+        try (BufferedReader reader = Files.newBufferedReader(filePath)) {
+            // Load center card
+            String line = reader.readLine();
+            String centerCard = line.substring(line.indexOf(":") + 2); // get the string after "Center Card: "
+            ArrayList<Card> centerBuffer = new ArrayList<>();
+            String[] centerStrings = centerCard.substring(1, centerCard.length() - 1).split(", "); // remove the brackets and split by ", " to get an array of strings like "SA", "H5", etc.
+            for (String card : centerStrings) {
+                result.add(new Card(card)); // create a new Card object from each string and add it to the result list
+            }
+            // Load remaining deck
+            line = reader.readLine();
+            String remainingDeck = line.substring(line.indexOf(":") + 2); // get the string after "Remaining Deck: "
+            cards.cardslist = parseCardList(remainingDeck); // create an ArrayList of Card objects from the string and assign it to cards.cardslist
+
+            // Load player cards
+            for (int i = 0; i < players.length; i++) {
+                line = reader.readLine();
+                String playerCards = line.substring(line.indexOf(":") + 2); // get the string after "Player X Cards: "
+                players[i].cardlist = parseCardList(playerCards); // create an ArrayList of Card objects from the string and assign it to players[i].cardlist
+            }
+
+            // Load round counter
+            line = reader.readLine();
+            String roundCount = line.substring(line.indexOf(":") + 2); // get the string after "Round Counter: "
+            roundCounter = Integer.parseInt(roundCount); // parse the string to an int and assign it to roundCounter
+
+            // Load scoring system
+            line = reader.readLine();
+            String scoreString = line.substring(line.indexOf(":") + 2); // get the string after "Score: "
+            String[] scores = scoreString.split(" | "); // split the string by " | " to get an array of strings like "Player X = Y"
+            for (int i = 0; i < scores.length; i++) {
+                String[] pair = scores[i].split(" = "); // split each string by " = " to get an array of strings like ["Player X", "Y"]
+                int playerIndex = Integer.parseInt(pair[0].substring(pair[0].length() - 1)) - 1; // get the last character of "Player X" and parse it to an int, then subtract 1 to get the index
+                int playerScore = Integer.parseInt(pair[1]); // parse "Y" to an int
+                players[playerIndex].score = playerScore; // assign the score to players[playerIndex].score
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        imageCache.put("cardback", new Image(this.getClass().getResourceAsStream("/lib/cards/cardback.png")));
     }
+
+    // A helper method that takes a string representation of a card list and returns an ArrayList of Card objects
+    private static ArrayList<Card> parseCardList(String cardList) {
+        ArrayList<Card> result = new ArrayList<>();
+        String[] cards = cardList.substring(1, cardList.length() - 1).split(", "); // remove the brackets and split by ", " to get an array of strings like "SA", "H5", etc.
+        for (String card : cards) {
+            result.add(new Card(card)); // create a new Card object from each string and add it to the result list
+        }
+        return result;
+    }
+
 
     public static int determineFirstPlayer(Player center, int roundCounter) throws InterruptedException {
         String cardNumber;
@@ -198,9 +247,22 @@ public class Main {
                     System.out.println("1. s - Start a new game");
                     System.out.println("2. x - Exit the game");
                     System.out.println("3. d - Draw cards from deck");
+                    System.out.println("4. save - Save your Game!");
+                    System.out.println("5. load - Load your Game!");
                     System.out.println("============================");
                     System.out.println();
                     defaultScreen(roundCounter, center, cards);
+                }
+                case SAVE -> {
+                    StringBuilder str = new StringBuilder();
+                    Scanner scan = new Scanner(System.in);
+                    System.out.print("Please enter the name that you want your save file to be\n (Do not include extension: .txt) : ");
+                    String filename;
+                    filename = scan.next();
+                    str.append(filename);
+                    str.append(".txt");
+                    saveGameState(str.toString(), center, cards, roundCounter, players);
+                    System.out.println("Done saving!");
                 }
                 case EXIT -> {
                     System.out.println("Thanks for playing!");
@@ -255,6 +317,8 @@ public class Main {
                 System.out.println("1. s - Start a new game");
                 System.out.println("2. x - Exit the game");
                 System.out.println("3. d - Draw cards from deck");
+                System.out.println("4. save - Save your Game!");
+                System.out.println("5. load - Load your Game!");
                 System.out
                         .println("You may type in 'help' or press '?' in the middle of the game to view the commands.");
                 System.out.println("\n");

@@ -6,64 +6,21 @@ import java.util.Random;
 
 
 
-public class Cards {
-    //private ICard[] cardings = new ICard[52];
-    public ArrayList<String> cardslist = new ArrayList<>();
-    
+public class Cards{
+    public ArrayList<Card> cardslist = new ArrayList<>();
+
     public Cards(){
 
     }
 
+
     public void initialiseCards(){
-        //Do Suits First
-        for (int suit = 0; suit < 4; suit++) {
-            // Suit 0 = Clubs, Suit 1 = Diamonds, Suit 2 = Hearts, Suit 3 = Spades
-            String suitLetter = "";
-            switch (suit) {
-                case 0:
-                    suitLetter = "c";
-                    break;
-
-                case 1:
-                    suitLetter = "d";
-                    break;
-
-                case 2:
-                    suitLetter = "h";
-                    break;
-
-                case 3:
-                    suitLetter = "s";
-                    break;
-            
-                default:
-                    break;
-            }
-
-            //Then start doing numbers
-            for (int i = 1; i <= 13; i++) {
-                String card;
-                if (i == 1) {
-                    card = suitLetter + "A";
-                }
-                else if (i == 10) {
-                    card = suitLetter + "X";
-                }
-                else if (i == 11) {
-                    card = suitLetter + "J";
-                }
-                else if (i == 12) {
-                    card = suitLetter + "Q";
-                }
-                else if (i == 13) {
-                    card = suitLetter + "K";
-                }
-                else {
-                    card = suitLetter + i;
-                }
-                cardslist.add(card);
+        for (Suit suit: Suit.values()) {
+            for (Rank rank: Rank.values()) {
+                cardslist.add(new Card(suit, rank));
             }
         }
+
 
 
     }
@@ -80,7 +37,7 @@ public class Cards {
             }
         }
     }
-    
+
 
     public String showCards(){
         String answer;
@@ -88,20 +45,33 @@ public class Cards {
         return answer;
     }
 
-    public String getAndRemoveCard(int value){
-        String result;
+    public Card getAndRemoveCard(int value){
+        Card result;
         result = cardslist.get(value);
         cardslist.remove(value);
         return result;
     }
 
-    public String getLeadingCard() {
+    public Card getLeadingCard() {
         return getAndRemoveCard(0);
     }
 
-    public void loadCardsFromString(String deckString) {
+    public String printCardlist() {
+        StringBuilder string = new StringBuilder();
+        string.append("[");
+        for (int i = 0; i < cardslist.size(); i++) {
+            string.append(cardslist.get(i).getCardSuit().getName());
+            string.append(cardslist.get(i).getCardRank().getNumberString());
+            string.append(",");
+            string.append(" ");
+        }
+        if (cardslist.toString().length() > 4) {
+            string.delete(string.toString().length() - 2, string.toString().length());
+        }
+        string.append("]");
+        return string.toString();
     }
 
-    
-    
+
+
 }

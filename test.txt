@@ -1,0 +1,8 @@
+Center Card: [h8, hQ]
+Remaining Deck: [sX, c3, c2, h5, dA, cK, h3, hJ, hA, sA, c7, cA, h4, hK, h2, h6, dK, s6, s3, s8, sK, d7, d9]
+Player 1 Cards: [dX, c6, c8, sJ, cJ, dJ, d5]
+Player 2 Cards: [s9, c4, s5, s2, h9, h7, s4]
+Player 3 Cards: [s7, d8, d6, hX, c5, cX, d4]
+Player 4 Cards: [cQ, sQ, c9, d2, dQ, d3]
+Round Counter: 1
+Score: Player 1 = 0 | Player 2 = 0 | Player 3 = 0 | Player 4 = 0

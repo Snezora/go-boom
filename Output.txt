@@ -6,3 +6,43 @@ Player 3 Cards: [c9, hQ, c5, c7, h6, s5]
 Player 4 Cards: [hK, s3, hJ, sK, h4, s7]
 Round Counter: 2
 Score: Player 1 = 0 | Player 2 = 0 | Player 3 = 0 | Player 4 = 0
+Center Card: [entity.Card@46f7f36a, entity.Card@433c675d, entity.Card@2b71fc7e, entity.Card@533ddba, entity.Card@5a10411]
+Remaining Deck: [entity.Card@5ce65a89, entity.Card@25f38edc, entity.Card@1a86f2f1, entity.Card@3eb07fd3, entity.Card@506c589e, entity.Card@69d0a921, entity.Card@446cdf90, entity.Card@799f7e29, entity.Card@4b85612c, entity.Card@277050dc, entity.Card@5c29bfd, entity.Card@7aec35a, entity.Card@67424e82, entity.Card@42110406, entity.Card@531d72ca, entity.Card@22d8cfe0, entity.Card@579bb367, entity.Card@1de0aca6, entity.Card@255316f2, entity.Card@41906a77, entity.Card@4b9af9a9, entity.Card@5387f9e0]
+Player 1 Cards: [entity.Card@3f91beef, entity.Card@1a6c5a9e, entity.Card@37bba400, entity.Card@179d3b25, entity.Card@254989ff, entity.Card@5d099f62]
+Player 2 Cards: [entity.Card@2e5d6d97, entity.Card@238e0d81, entity.Card@31221be2, entity.Card@377dca04, entity.Card@728938a9, entity.Card@21b8d17c, entity.Card@6433a2]
+Player 3 Cards: [entity.Card@5910e440, entity.Card@6267c3bb, entity.Card@246b179d, entity.Card@7a07c5b4, entity.Card@26a1ab54, entity.Card@3d646c37]
+Player 4 Cards: [entity.Card@41cf53f9, entity.Card@2ef1e4fa, entity.Card@306a30c7, entity.Card@b81eda8, entity.Card@68de145, entity.Card@27fa135a]
+Round Counter: 2
+Score: Player 1 = 0 | Player 2 = 0 | Player 3 = 0 | Player 4 = 0
+Center Card: [d9, dK, dX, d8, d3]
+Remaining Deck: [entity.Card@5ce65a89, entity.Card@25f38edc, entity.Card@1a86f2f1, entity.Card@3eb07fd3, entity.Card@506c589e, entity.Card@69d0a921, entity.Card@446cdf90, entity.Card@799f7e29, entity.Card@4b85612c, entity.Card@277050dc, entity.Card@5c29bfd, entity.Card@7aec35a, entity.Card@67424e82, entity.Card@42110406, entity.Card@531d72ca, entity.Card@22d8cfe0, entity.Card@579bb367, entity.Card@1de0aca6, entity.Card@255316f2, entity.Card@41906a77, entity.Card@4b9af9a9, entity.Card@5387f9e0]
+Player 1 Cards: [sJ, h2, dQ, h5, d5, s6]
+Player 2 Cards: [s2, hX, sK, h3, c7, cK, hJ]
+Player 3 Cards: [h8, hA, s5, h4, cJ, cX]
+Player 4 Cards: [h9, cA, c6, c2, cQ, c8]
+Round Counter: 2
+Score: Player 1 = 0 | Player 2 = 0 | Player 3 = 0 | Player 4 = 0
+Center Card: [s8, sK, s5, sX, sQ]
+Remaining Deck: [h5, hK, d2, sJ, dQ, hQ, c5, d3, s2, d5, cX, hX, h7, h3, dK, cQ, h2, c6, d8, s4, sA, c3, dA]
+Player 1 Cards: [d9, d6, dJ, cK, c9, c8]
+Player 2 Cards: [h9, h8, h4, h6, s9, dX]
+Player 3 Cards: [s6, s3, hJ, cA, c7, d4]
+Player 4 Cards: [hA, c2, d7, cJ, s7, c4]
+Round Counter: 2
+Score: Player 1 = 0 | Player 2 = 0 | Player 3 = 0 | Player 4 = 0
+Center Card: [hA, sA, hX, h8, h2]
+Remaining Deck: [s8, c7, c6, c9, sQ, d9, d4, cX, sJ, hJ, c8, h9, cA, s2, dJ, d7, d2, s9, cQ, sK, h4, h7, s3]
+Player 1 Cards: [c2, cJ, dK, c3, h5, hK]
+Player 2 Cards: [s7, sX, s6, dQ, d8, d5]
+Player 3 Cards: [h3, h6, hQ, d3, cK, c4]
+Player 4 Cards: [dX, s5, s4, c5, dA, d6]
+Round Counter: 2
+Score: Player 1 = 0 | Player 2 = 0 | Player 3 = 0 | Player 4 = 0
+Center Card: [d9, dJ, d4, d3, dX]
+Remaining Deck: [c2, s8, d2, d5, hK, c9, dQ, d7, s4, hX, s7, s5, cA, sJ, sA, dA, sK, d8, c8, dK, sX, sQ, cQ]
+Player 1 Cards: [c6, hJ, c4, c3, c7, hQ]
+Player 2 Cards: [h8, s6, h4, d6, c5, s9]
+Player 3 Cards: [cJ, s2, h5, h9, cX, h2]
+Player 4 Cards: [cK, h7, s3, h6, hA, h3]
+Round Counter: 2
+Score: Player 1 = 0 | Player 2 = 0 | Player 3 = 0 | Player 4 = 0
