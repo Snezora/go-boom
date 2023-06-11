@@ -11,4 +11,7 @@
     <color name="image_border_end">#FF660000</color>
     <color name="image_border_center">#FFFF3333</color>
     <color name="default_back_color">#99FFFFFF</color>
+    <color name="image_border_start_selected">#FFFFBF00</color>
+    <color name="image_border_end_selected">#FFFFBF00</color>
+    <color name="image_border_center_selected">#FFFF3333</color>
 </resources>

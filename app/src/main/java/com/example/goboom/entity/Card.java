@@ -53,5 +53,24 @@ public class Card {
         return bruh;
     }
 
+    // Override equals() method
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Card) {
+            Card other = (Card) obj;
+            return this.cardSuit == other.cardSuit && this.cardRank == other.cardRank;
+        }
+        return false;
+    }
 
+    // Override hashCode() method
+    @Override
+    public int hashCode() {
+        // Use a prime number to combine the suit and rank hash codes
+        int prime = 31;
+        int result = 1;
+        result = prime * result + cardSuit.hashCode();
+        result = prime * result + cardRank.hashCode();
+        return result;
+    }
 }

@@ -11,8 +11,8 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/gameMenuButton"
         style="@style/Widget.AppCompat.Button"
-        android:layout_width="45dp"
-        android:layout_height="47dp"
+        android:layout_width="56dp"
+        android:layout_height="55dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:foreground="@android:drawable/ic_menu_more"
@@ -173,6 +173,7 @@
         android:id="@+id/cancelPlayButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="cancelPlay"
         android:text="CANCEL"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -180,41 +181,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.939" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/gameMenu"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#C7000000"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="gone">
-
-        <Button
-            android:id="@+id/restartButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="98dp"
-            android:text="RESTART"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/reverseGameMenuButton"
-            style="@style/Widget.AppCompat.Button"
-            android:layout_width="45dp"
-            android:layout_height="47dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:foreground="@android:drawable/ic_menu_more"
-            android:onClick="closeMenu"
-            android:rotation="180"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/drawCardB2"
@@ -243,5 +209,139 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.56" />
+
+    <TextView
+        android:id="@+id/cardsLeft1"
+        android:layout_width="103dp"
+        android:layout_height="29dp"
+        android:gravity="center"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.035"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.646" />
+
+    <TextView
+        android:id="@+id/cardsLeft2"
+        android:layout_width="105dp"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.968"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.648" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/gameMenu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#C7000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:visibility="visible">
+
+        <Button
+            android:id="@+id/restartButton"
+            android:layout_width="161dp"
+            android:layout_height="56dp"
+            android:background="#275395"
+            android:onClick="restart"
+            android:text="RESTART"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.26" />
+
+        <Button
+            android:id="@+id/saveGameBtn"
+            android:layout_width="161dp"
+            android:layout_height="56dp"
+            android:background="#275395"
+            android:onClick="saveGameButton"
+            android:text="SAVE"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.45" />
+
+        <Button
+            android:id="@+id/loadGameBtn"
+            android:layout_width="161dp"
+            android:layout_height="56dp"
+            android:background="#275395"
+            android:onClick="showLoad"
+            android:text="LOAD"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.64" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/reverseGameMenuButton"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="45dp"
+            android:layout_height="47dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:foreground="@android:drawable/ic_menu_more"
+            android:onClick="closeMenu"
+            android:rotation="180"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/saveGameBar"
+            android:layout_width="912dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="2dp"
+            android:background="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.81">
+
+            <EditText
+                android:id="@+id/gameSaveName"
+                android:layout_width="408dp"
+                android:layout_height="41dp"
+                android:background="@color/purple_700"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="textPersonName"
+                android:hint="Save Game Name (without .txt)"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.353"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.555" />
+
+            <Button
+                android:id="@+id/saveFileFinder"
+                android:layout_width="116dp"
+                android:layout_height="45dp"
+                android:onClick="saveGame"
+                android:text="Confirm"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.76"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
