@@ -45,4 +45,10 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(this, GameActivity.class);
         startActivity(i);
     }
+
+    public void resumeGame(View v) {
+        Intent i = new Intent(this, GameActivity.class);
+        i.putExtra("resume", true);
+        startActivity(i);
+    }
 }

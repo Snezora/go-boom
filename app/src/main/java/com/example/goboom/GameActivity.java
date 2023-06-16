@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,6 +41,7 @@ public class GameActivity extends AppCompatActivity {
 
     private final Handler mainHandler = new Handler();
 
+
     //Useful counters
     static int roundCounter = 1;
 
@@ -58,9 +60,11 @@ public class GameActivity extends AppCompatActivity {
     static Cards cards = new Cards();
     static Player firstPlayer = null, secondPlayer = null, thirdPlayer = null, fourthPlayer = null;
     static Player[] players = new Player[4];
-    static Player currentPlayer = null;
+    static Player currentPlayer;
 
     static int playerNumber = 0;
+
+    boolean resume = false;
 
     static ArrayList<Player> playerTurnList = new ArrayList<>();
 
@@ -148,7 +152,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
 
-    public static int determineFirstPlayer(Player center, int roundCounter) {
+    public int determineFirstPlayer(Player center, int roundCounter) {
         String cardNumber;
         Card card;
         int result = 0;
@@ -185,15 +189,11 @@ public class GameActivity extends AppCompatActivity {
         } else {
 
             String leadCardSuit = center.cardlist.get(0).getCardSuit().getName();
-            Log.d("LeadCardSuit", leadCardSuit);
             int highestRank = center.cardlist.get(0).getCardRank().getNumber();
-            Log.d("highestRank", String.valueOf(highestRank));
             if (center.cardlist.size() >= 4) {
                 for (int i = 0; i < 4; i++) {
                     Player currentPlayerHere = players[i];
-                    Log.d("Player", currentPlayerHere.name);
                     Card currentCard = currentPlayerHere.cardPlayed;
-                    Log.d("PlayerCard", currentCard.cardName());
                     String currentCardSuit = currentCard.getCardSuit().getName();
                     int currentCardNumber = currentCard.getCardRank().getNumber();
                     if (currentCardSuit.equals(leadCardSuit) && (currentCardNumber > highestRank)) {
@@ -205,6 +205,14 @@ public class GameActivity extends AppCompatActivity {
                 restart = true;
             }
         }
+        int temp = result;
+
+        if (result == 0) {
+            result = Integer.parseInt(firstPlayer.name.substring(7, 8));
+        }
+        Log.d("Result", "Player " + result + " won this round!");
+        Toast.makeText(this, "Player " + result + " has won the first round! Continuing the game.", Toast.LENGTH_SHORT).show();
+        result = temp;
         return result;
     }
 
@@ -217,6 +225,7 @@ public class GameActivity extends AppCompatActivity {
         Log.d("Output", "Player 2 Cards = " + players[1].printCardlist());
         Log.d("Output", "Player 3 Cards = " + players[2].printCardlist());
         Log.d("Output", "Player 4 Cards = " + players[3].printCardlist());
+        Log.d("Output", "Current Player = " + currentPlayer.name);
         Log.d("Output", "Center Card = " + center.printCardlist());
         Log.d("Output", "Player Scores = Player 1: " + players[0].score + " | Player 2: " + players[1].score + " | Player 3: " + players[2].score + " | Player 4: " + players[3].score);
         Log.d("Output", "Cards: " + cards.printCardlist());
@@ -237,7 +246,14 @@ public class GameActivity extends AppCompatActivity {
         playButton.setVisibility(View.INVISIBLE);
         cancelPlayButton.setVisibility(View.INVISIBLE);
 
+        resume = getIntent().getBooleanExtra("resume", false);
+
+
         playerNumber = 0;
+
+//        if (resume) {
+//            starter = false;
+//        }
 
         // Initialize the players
         for (int i = 0; i < players.length; i++) {
@@ -248,18 +264,24 @@ public class GameActivity extends AppCompatActivity {
         TextView roundCounterText = findViewById(R.id.roundCounterText);
 
         roundCounterText.setText("Round " + takeCounter);
-        startGame();
+        try {
+            starter = true;
+            startGame();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
 
     }
 
-    public void startGame() {
+    public void startGame() throws IOException {
         TextView playerScoreText = findViewById(R.id.playerScoresText);
         Resources res = getResources(); // get a reference to the resources object
         TextView roundCounterText = findViewById(R.id.roundCounterText);
         TextView cardsLeft = findViewById(R.id.cardsLeft1);
         TextView cardsLeft2 = findViewById(R.id.cardsLeft2);
         playerNumber = 0;
+
         if (starter) {
             roundCounter = 1;
             roundCounterText.setText("Round " + takeCounter);
@@ -347,12 +369,22 @@ public class GameActivity extends AppCompatActivity {
 
             }
         }
+        if (resume) {
+            try {
+                loadFile("autoSave.txt");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         cardsLeft.setText("Cards Left: " + cards.cardslist.size());
         cardsLeft2.setText("Cards Left: " + cards.cardslist.size());
 
         getCardsIntoCenter(center);
-        GameThread game = new GameThread();
-        game.run();
+
+            GameThread game = new GameThread();
+            game.run();
+
+        resume = false;
     }
 
 
@@ -364,6 +396,8 @@ public class GameActivity extends AppCompatActivity {
             mainHandler.post(new Runnable() {
                 @Override
                 public void run() {
+                    TextView playerScoreText = findViewById(R.id.playerScoresText);
+                    playerScoreText.setText("Scores = Player 1: " + players[0].score + " | Player 2: " + players[1].score + " | Player 3: " + players[2].score + " | Player 4: " + players[3].score);
                     if (roundCounter == 1) {
                         if (center.cardlist.size() == 5) {
                             lock = true;
@@ -444,6 +478,11 @@ public class GameActivity extends AppCompatActivity {
                                 player.turnEnd = false;
                             }
                             printOutput();
+                            try {
+                                AutoSaveGame();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                             playerTurnText.setText("Playing now: " + currentPlayer.name);
                             Thread.yield();
                         } else {
@@ -525,30 +564,41 @@ public class GameActivity extends AppCompatActivity {
                                     player.turnEnd = false;
                                 }
                                 printOutput();
+                                try {
+                                    AutoSaveGame();
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
                                 playerTurnText.setText("Playing now: " + currentPlayer.name);
                                 Thread.yield();
                             } else {
-                                if (playerNumber == 0) {
-                                    currentPlayer = firstPlayer;
-                                } else if (playerNumber == 1) {
-                                    currentPlayer = secondPlayer;
-                                } else if (playerNumber == 2) {
-                                    currentPlayer = thirdPlayer;
-                                } else if (playerNumber == 3) {
-                                    currentPlayer = fourthPlayer;
-                                } else if (playerNumber >= 4) {
-                                    playerNumber = 0;
-                                    GameThread.this.run();
-                                }
+                                    if (playerNumber == 0) {
+                                        currentPlayer = firstPlayer;
+                                    } else if (playerNumber == 1) {
+                                        currentPlayer = secondPlayer;
+                                    } else if (playerNumber == 2) {
+                                        currentPlayer = thirdPlayer;
+                                    } else if (playerNumber == 3) {
+                                        currentPlayer = fourthPlayer;
+                                    } else if (playerNumber >= 4) {
+                                        playerNumber = 0;
+                                        GameThread.this.run();
 
-                                playerCardScreen(currentPlayer);
-                                for (Player player : players) {
-                                    player.turnEnd = false;
                                 }
-                                printOutput();
-                                playerTurnText.setText("Playing now: " + currentPlayer.name);
-                                Thread.yield();
                             }
+
+                            playerCardScreen(currentPlayer);
+                            for (Player player : players) {
+                                player.turnEnd = false;
+                            }
+                            printOutput();
+                            try {
+                                AutoSaveGame();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            playerTurnText.setText("Playing now: " + currentPlayer.name);
+                            Thread.yield();
                         }
                     } else {
                         if (center.cardlist.size() == 4) {
@@ -623,12 +673,16 @@ public class GameActivity extends AppCompatActivity {
                                 playerNumber = 0;
                                 GameThread.this.run();
                             }
-
                             playerCardScreen(currentPlayer);
                             for (Player player : players) {
                                 player.turnEnd = false;
                             }
                             printOutput();
+                            try {
+                                AutoSaveGame();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                             playerTurnText.setText("Playing now: " + currentPlayer.name);
                             Thread.yield();
                         } else {
@@ -704,12 +758,16 @@ public class GameActivity extends AppCompatActivity {
                                     playerNumber = 0;
                                     GameThread.this.run();
                                 }
-
                                 playerCardScreen(currentPlayer);
                                 for (Player player : players) {
                                     player.turnEnd = false;
                                 }
                                 printOutput();
+                                try {
+                                    AutoSaveGame();
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
                                 playerTurnText.setText("Playing now: " + currentPlayer.name);
                                 Thread.yield();
                             } else {
@@ -730,40 +788,68 @@ public class GameActivity extends AppCompatActivity {
                                     playerNumber = 0;
                                     GameThread.this.run();
                                 }
-
                                 playerCardScreen(currentPlayer);
                                 for (Player player : players) {
                                     player.turnEnd = false;
                                 }
                                 printOutput();
+                                try {
+                                    AutoSaveGame();
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
                                 playerTurnText.setText("Playing now: " + currentPlayer.name);
                                 Thread.yield();
                             }
                         }
-                    }
 
+                    }
                 }
             });
         }
+
     }
 
-    public void seeIfWin() {
+    public void addScores(Player player) {
+        int sum = 0;
+        for (Card card : player.cardlist) {
+            int cardInQues;
+            cardInQues = card.getCardRank().getNumber();
+            if (cardInQues == 14) {
+                cardInQues = 1;
+            } else if (cardInQues < 14 && cardInQues > 10) {
+                cardInQues = 10;
+            }
+            sum = sum + cardInQues;
+        }
+        player.score = player.score + sum;
+    }
+
+    public void seeIfWin() throws IOException {
         if (currentPlayer.cardlist.size() == 0) {
             if (currentPlayer.name.equals(players[0].name)) {
                 Toast.makeText(this, players[0].name + " has won the first match! Restarting with new deck.", Toast.LENGTH_LONG).show();
-                players[0].score++;
+                addScores(players[1]);
+                addScores(players[2]);
+                addScores(players[3]);
             }
             if (currentPlayer.name.equals(players[1].name)) {
                 Toast.makeText(this, players[1].name + " has won the first match! Restarting with new deck.", Toast.LENGTH_LONG).show();
-                players[1].score++;
+                addScores(players[0]);
+                addScores(players[2]);
+                addScores(players[3]);
             }
             if (currentPlayer.name.equals(players[2].name)) {
                 Toast.makeText(this, players[2].name + " has won the first match! Restarting with new deck.", Toast.LENGTH_LONG).show();
-                players[2].score++;
+                addScores(players[0]);
+                addScores(players[1]);
+                addScores(players[3]);
             }
             if (currentPlayer.name.equals(players[3].name)) {
                 Toast.makeText(this, players[3].name + " has won the first match! Restarting with new deck.", Toast.LENGTH_LONG).show();
-                players[3].score++;
+                addScores(players[0]);
+                addScores(players[1]);
+                addScores(players[2]);
             }
             takeCounter++;
             starter = true;
@@ -772,7 +858,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
 
-    public void playCard(View v) {
+    public void playCard(View v) throws IOException {
         // Get the tag of the selected card view
         TextView playTurn = findViewById(R.id.playerCardText);
         String cardName = playTurn.getText().toString().replace("Selected Card: ", "");
@@ -1019,8 +1105,9 @@ public class GameActivity extends AppCompatActivity {
     }
 
 
-    public void restart(View v) {
+    public void restart(View v) throws IOException {
         starter = true;
+        resume = false;
         for (Player player : players) {
             player.score = 0;
         }
@@ -1046,25 +1133,31 @@ public class GameActivity extends AppCompatActivity {
         TextView cardsLeft = findViewById(R.id.cardsLeft1);
         TextView cardsLeft2 = findViewById(R.id.cardsLeft2);
         if (cards.cardslist.size() == 0) {
-            cardsLeft.setText("Cards Left: 0");
-            cardsLeft2.setText("Cards Left: 0");
-            Log.d("Output", currentPlayer.name + " has tried to draw a card but there's no cards left!");
-            if (currentPlayer.name.equals(players[0].name)) {
-                players[0].turnEnd = true;
+            if (players[0].turnEnd && players[1].turnEnd && players[2].turnEnd && players[3].turnEnd) {
+                GameThread game = new GameThread();
+                game.run();
+            } else {
+                cardsLeft.setText("Cards Left: 0");
+                cardsLeft2.setText("Cards Left: 0");
+                Log.d("Output", currentPlayer.name + " has tried to draw a card but there's no cards left!");
+                if (currentPlayer.name.equals(players[0].name)) {
+                    players[0].turnEnd = true;
+                }
+                if (currentPlayer.name.equals(players[1].name)) {
+                    players[1].turnEnd = true;
+                }
+                if (currentPlayer.name.equals(players[2].name)) {
+                    players[2].turnEnd = true;
+                }
+                if (currentPlayer.name.equals(players[3].name)) {
+                    players[3].turnEnd = true;
+                }
+                playerNumber++;
+                GameThread game = new GameThread();
+                game.run();
             }
-            if (currentPlayer.name.equals(players[1].name)) {
-                players[1].turnEnd = true;
-            }
-            if (currentPlayer.name.equals(players[2].name)) {
-                players[2].turnEnd = true;
-            }
-            if (currentPlayer.name.equals(players[3].name)) {
-                players[3].turnEnd = true;
-            }
-            playerNumber++;
-            GameThread game = new GameThread();
-            game.run();
         } else {
+
             currentPlayer.drawOneCard(cards);
             cardsLeft.setText("Cards Left: " + cards.cardslist.size());
             cardsLeft2.setText("Cards Left: " + cards.cardslist.size());
@@ -1123,7 +1216,7 @@ public class GameActivity extends AppCompatActivity {
         boolean fileCreated = file.createNewFile();
 
         if (fileCreated) {
-            FileWriter writer = new FileWriter(file, true);
+            FileWriter writer = new FileWriter(file, false);
             Gson gson = new Gson();
 
             String jsonRoundCounter = gson.toJson(roundCounter);
@@ -1148,6 +1241,9 @@ public class GameActivity extends AppCompatActivity {
             writer.write(jsonThirdPlayer + lineSeperator);
             String jsonFourthPlayer = gson.toJson(fourthPlayer);
             writer.write(jsonFourthPlayer + lineSeperator);
+
+            String jsonCurrentPlayer = gson.toJson(currentPlayer);
+            writer.write(jsonCurrentPlayer + lineSeperator);
 
 
             String jsonCenter = gson.toJson(center);
@@ -1176,6 +1272,103 @@ public class GameActivity extends AppCompatActivity {
         cancelPlayButton.setVisibility(View.VISIBLE);
         Toast.makeText(this, "A new game file has been saved named " + str.toString() + "!", Toast.LENGTH_LONG).show();
     }
+
+    public void AutoSaveGame() throws IOException {
+
+        String lineSeperator = System.lineSeparator();
+
+        File dir = getFilesDir();
+        File file = new File(dir, "autoSave.txt");
+        String path = file.getAbsolutePath();
+        boolean fileCreated = file.createNewFile();
+
+        if (fileCreated) {
+            FileWriter writer = new FileWriter(file, false);
+            Gson gson = new Gson();
+
+            String jsonRoundCounter = gson.toJson(roundCounter);
+            writer.write(jsonRoundCounter + lineSeperator);
+            Log.d("Output", "roundCounter saved!");
+            Log.d("Output", path);
+
+            String jsonPlayerNumber = gson.toJson(playerNumber);
+            writer.write(jsonPlayerNumber + lineSeperator);
+            Log.d("PlayerNumber", jsonPlayerNumber);
+
+            for (Player player : players) {
+                String jsonPlayer = gson.toJson(player);
+                writer.write(jsonPlayer + lineSeperator);
+            }
+
+            String jsonFirstPlayer = gson.toJson(firstPlayer);
+            writer.write(jsonFirstPlayer + lineSeperator);
+            String jsonSecondPlayer = gson.toJson(secondPlayer);
+            writer.write(jsonSecondPlayer + lineSeperator);
+            String jsonThirdPlayer = gson.toJson(thirdPlayer);
+            writer.write(jsonThirdPlayer + lineSeperator);
+            String jsonFourthPlayer = gson.toJson(fourthPlayer);
+            writer.write(jsonFourthPlayer + lineSeperator);
+
+            String jsonCurrentPlayer = gson.toJson(currentPlayer);
+            writer.write(jsonCurrentPlayer + lineSeperator);
+
+
+            String jsonCenter = gson.toJson(center);
+            writer.write(jsonCenter + lineSeperator);
+
+            String jsonCardDeck = gson.toJson(cards);
+            writer.write(jsonCardDeck + lineSeperator);
+
+            String cardImageHashMap = gson.toJson(cardIntegerHashMap);
+            writer.write(cardImageHashMap + lineSeperator);
+
+            writer.close();
+
+        } else {
+            FileWriter writer = new FileWriter(file, false);
+            Gson gson = new Gson();
+
+            String jsonRoundCounter = gson.toJson(roundCounter);
+            writer.write(jsonRoundCounter + lineSeperator);
+            Log.d("Output", "roundCounter saved!");
+            Log.d("Output", path);
+
+            String jsonPlayerNumber = gson.toJson(playerNumber);
+            writer.write(jsonPlayerNumber + lineSeperator);
+            Log.d("PlayerNumber", jsonPlayerNumber);
+
+            for (Player player : players) {
+                String jsonPlayer = gson.toJson(player);
+                writer.write(jsonPlayer + lineSeperator);
+            }
+
+            String jsonFirstPlayer = gson.toJson(firstPlayer);
+            writer.write(jsonFirstPlayer + lineSeperator);
+            String jsonSecondPlayer = gson.toJson(secondPlayer);
+            writer.write(jsonSecondPlayer + lineSeperator);
+            String jsonThirdPlayer = gson.toJson(thirdPlayer);
+            writer.write(jsonThirdPlayer + lineSeperator);
+            String jsonFourthPlayer = gson.toJson(fourthPlayer);
+            writer.write(jsonFourthPlayer + lineSeperator);
+
+            String jsonCurrentPlayer = gson.toJson(currentPlayer);
+            writer.write(jsonCurrentPlayer + lineSeperator);
+
+
+            String jsonCenter = gson.toJson(center);
+            writer.write(jsonCenter + lineSeperator);
+
+            String jsonCardDeck = gson.toJson(cards);
+            writer.write(jsonCardDeck + lineSeperator);
+
+            String cardImageHashMap = gson.toJson(cardIntegerHashMap);
+            writer.write(cardImageHashMap + lineSeperator);
+
+            writer.close();
+
+        }
+    }
+
 
     public void showLoad(View v) {
         File dir = getFilesDir();
@@ -1248,7 +1441,18 @@ public class GameActivity extends AppCompatActivity {
             thirdPlayer = gson.fromJson(line, Player.class);
             line = bufferedReader.readLine(); // Read the next line
             fourthPlayer = gson.fromJson(line, Player.class);
+            line = bufferedReader.readLine();
+            currentPlayer = gson.fromJson(line, Player.class);
 
+            if (currentPlayer.name.equals(players[0].name)) {
+                currentPlayer = players[0];
+            } else if (currentPlayer.name.equals(players[1].name)) {
+                currentPlayer = players[1];
+            } else if (currentPlayer.name.equals(players[2].name)) {
+                currentPlayer = players[2];
+            } else if (currentPlayer.name.equals(players[3].name)) {
+                currentPlayer = players[3];
+            }
 
             line = bufferedReader.readLine(); // Read the next line
             center = gson.fromJson(line, Player.class); // Convert the current line to a Center object
@@ -1271,7 +1475,7 @@ public class GameActivity extends AppCompatActivity {
             drawCard2.setVisibility(View.VISIBLE);
             playButton.setVisibility(View.VISIBLE);
             cancelPlayButton.setVisibility(View.VISIBLE);
-            Toast.makeText(this, s + " has been loaded!" , Toast.LENGTH_LONG).show();
+            Toast.makeText(this, s + " has been loaded!", Toast.LENGTH_LONG).show();
             GameThread game = new GameThread();
             game.run();
         } else {
