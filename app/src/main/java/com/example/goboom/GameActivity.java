@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,22 +21,17 @@ import com.example.goboom.entity.Card;
 import com.example.goboom.entity.Cards;
 import com.example.goboom.entity.Player;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.CountDownLatch;
 
 
 public class GameActivity extends AppCompatActivity {
-    private final int CHOOSE_FILE_FROM_DEVICE = 1001;
 
     private final Handler mainHandler = new Handler();
 
@@ -49,10 +43,6 @@ public class GameActivity extends AppCompatActivity {
     static boolean starter = true;
     static boolean restart = false;
     static boolean lock = false;
-    static volatile boolean newRound = false;
-
-    static CountDownLatch latch;
-
 
     // Array to store players and center
     static Player center = new Player();
@@ -145,10 +135,6 @@ public class GameActivity extends AppCompatActivity {
             // Add the ImageView to the LinearLayout
             imageList.addView(imageView);
         }
-    }
-
-    public static Player getPlayerByNumber(int playerNumber) {
-        return players[playerNumber - 1];
     }
 
 
@@ -288,6 +274,7 @@ public class GameActivity extends AppCompatActivity {
         playerNumber = 0;
 
         if (starter) {
+            takeCounter = 1;
             roundCounter = 1;
             roundCounterText.setText("Round " + takeCounter);
 
@@ -802,6 +789,7 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
+
     public void addScores(Player player) {
         int sum = 0;
         for (Card card : player.cardlist) {
@@ -1103,8 +1091,11 @@ public class GameActivity extends AppCompatActivity {
         for (Player player : players) {
             player.score = 0;
         }
+        takeCounter = 1;
         Toast.makeText(this, "A restart has been initialised and completed!", Toast.LENGTH_LONG).show();
         startGame();
+        TextView roundCounterText = findViewById(R.id.roundCounterText);
+        roundCounterText.setText("Round " + takeCounter);
         View gameMenuButton = findViewById(R.id.gameMenuButton);
         gameMenuButton.setVisibility(View.VISIBLE);
         View gameMenu = findViewById(R.id.gameMenu);
@@ -1274,7 +1265,6 @@ public class GameActivity extends AppCompatActivity {
         String path = file.getAbsolutePath();
         boolean fileCreated = file.createNewFile();
 
-        if (fileCreated) {
             FileWriter writer = new FileWriter(file, false);
             Gson gson = new Gson();
 
@@ -1316,50 +1306,8 @@ public class GameActivity extends AppCompatActivity {
 
             writer.close();
 
-        } else {
-            FileWriter writer = new FileWriter(file, false);
-            Gson gson = new Gson();
-
-            String jsonTakeCounter = gson.toJson(takeCounter);
-            writer.write(jsonTakeCounter + lineSeperator);
-
-            String jsonRoundCounter = gson.toJson(roundCounter);
-            writer.write(jsonRoundCounter + lineSeperator);
 
 
-            String jsonPlayerNumber = gson.toJson(playerNumber);
-            writer.write(jsonPlayerNumber + lineSeperator);
-
-            for (Player player : players) {
-                String jsonPlayer = gson.toJson(player);
-                writer.write(jsonPlayer + lineSeperator);
-            }
-
-            String jsonFirstPlayer = gson.toJson(firstPlayer);
-            writer.write(jsonFirstPlayer + lineSeperator);
-            String jsonSecondPlayer = gson.toJson(secondPlayer);
-            writer.write(jsonSecondPlayer + lineSeperator);
-            String jsonThirdPlayer = gson.toJson(thirdPlayer);
-            writer.write(jsonThirdPlayer + lineSeperator);
-            String jsonFourthPlayer = gson.toJson(fourthPlayer);
-            writer.write(jsonFourthPlayer + lineSeperator);
-
-            String jsonCurrentPlayer = gson.toJson(currentPlayer);
-            writer.write(jsonCurrentPlayer + lineSeperator);
-
-
-            String jsonCenter = gson.toJson(center);
-            writer.write(jsonCenter + lineSeperator);
-
-            String jsonCardDeck = gson.toJson(cards);
-            writer.write(jsonCardDeck + lineSeperator);
-
-            String cardImageHashMap = gson.toJson(cardIntegerHashMap);
-            writer.write(cardImageHashMap + lineSeperator);
-
-            writer.close();
-
-        }
     }
 
 

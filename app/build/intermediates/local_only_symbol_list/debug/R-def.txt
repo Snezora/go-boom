@@ -134,7 +134,9 @@ layout help_menu
 layout image_view
 layout main_menu
 mipmap ic_launcher
-mipmap ic_launcher_round
+mipmap ic_launcher_background
+mipmap ic_launcher_foreground
+mipmap ic_launcher_monochrome
 string action_settings
 string app_name
 string exit

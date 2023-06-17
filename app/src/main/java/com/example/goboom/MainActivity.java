@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void help(View view) {
+        clicks = 0;
         setContentView(R.layout.help_menu);
         Log.d("OUTPUT", "Help Menu is Accessed! \n  " +
                 "    1. s - Start a new game\n" +
@@ -43,11 +44,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void launchGame(View v) {
         Intent i = new Intent(this, GameActivity.class);
+        clicks = 0;
         startActivity(i);
     }
 
     public void resumeGame(View v) {
         Intent i = new Intent(this, GameActivity.class);
+        clicks = 0;
         i.putExtra("resume", true);
         startActivity(i);
     }

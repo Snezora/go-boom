@@ -12,5 +12,4 @@
     android:foregroundGravity="center"
     android:padding="5dp"
     android:scaleType="fitXY"
-    android:src="@drawable/cardback"
     app:layout_anchorGravity="center" />
