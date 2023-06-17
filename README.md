@@ -8,6 +8,8 @@ No | ID         |         Name         | Task descriptions | Contribution %
 2  | 1201103427 |   Hong Yoong Shem    | Develop Save & load function |    25%
 3  | 1221303291 |Nurul Balqis binti Ridzuwan| Keeping track of Game logic & graphic design  | 25%
 
+(Do go to Part1.md to see the task descriptions for Part 1)
+
 
 
 ## B. Part 1 Feature Completion (Latest)
