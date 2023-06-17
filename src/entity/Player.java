@@ -11,7 +11,7 @@ public class Player {
 
     public Player() { 
     }
-    
+
     public Player(ArrayList<Card> cardlist) { //constructor
         this.cardlist = cardlist;
     }
@@ -97,7 +97,6 @@ public class Player {
             else {
                 System.out.println("You must only play the same rank or the same suit as the leading card!");
             }
-
         }
     }
 
