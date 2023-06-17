@@ -52,7 +52,7 @@ https://github.com/Snezora/go-boom
 
 ## E. Guide to Start Game
 1. Download Android Studio from here (https://developer.android.com/studio)
-2. Choose the device you want to test on using Device Manager (P.S. We used virtual Google Pixel 6 & a physical Samsung Galaxy Note 8 as our test, so it's recommended to use these)
-3. The android files should be in this directory (app -> src -> main)
+2. Choose the device you want to test on using Device Manager (P.S. We used virtual Google Pixel 6 & a physical Samsung Galaxy Note 8 as our test devices, so it's recommended to use these)
+3. The android files should be in this directory (PART 2 -> app -> src -> main). Open the android studio with directory set to here.
 4. Hit play to start playing on the device.
 
