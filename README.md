@@ -45,7 +45,8 @@ No | Feature                                                                    
 
 ## D. Link to Part 2 GitHub Repo
 
-https://github.com/Snezora/go-boom
+https://github.com/Snezora/go-boom 
+(You are already here, there is absolutely no need to click)
 
 
 
