@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/menubackground"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/GoBoomTitle"
+        android:layout_width="529dp"
+        android:layout_height="131dp"
+        android:layout_marginStart="207dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="207dp"
+        android:background="#FFFFFF"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="10sp"
+        android:shadowColor="#D53232"
+        android:stateListAnimator="@android:anim/slide_in_left"
+        android:text="@string/go_boom"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#2196F3"
+        android:textColorHighlight="#D16F6F"
+        android:textSize="60sp"
+        android:textStyle="bold"
+        android:typeface="serif"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/helpButton"
+        android:layout_width="131dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="74dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="526dp"
+        android:layout_marginBottom="97dp"
+        android:onClick="help"
+        android:text="@string/help"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/GoBoomTitle"
+        app:layout_constraintVertical_bias="0.47000003" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/startButton"
+        android:layout_width="131dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="97dp"
+        android:onClick="launchGame"
+        android:text="@string/start"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.566"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.596" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/resumeButton"
+        android:layout_width="131dp"
+        android:layout_height="55dp"
+        android:layout_marginEnd="97dp"
+        android:onClick="resumeGame"
+        android:text="RESUME"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.568"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/startButton"
+        app:layout_constraintVertical_bias="0.166" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/exitButton"
+        android:layout_width="131dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="532dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="74dp"
+        android:layout_marginBottom="97dp"
+        android:onClick="exitButton"
+        android:text="@string/exit"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/GoBoomTitle"
+        app:layout_constraintVertical_bias="0.477" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
