@@ -28,12 +28,12 @@
         "source": "C:\\Program Files\\Android\\Android Studio\\jbr\\daemon\\7.5\\com.example.goboom.app-main-48:\\drawable\\h6.png"
     },
     {
-        "merged": "C:\\Program Files\\Android\\Android Studio\\jbr\\daemon\\7.5\\com.example.goboom.app-merged_res-46:\\mipmap-mdpi_ic_launcher_round.webp.flat",
-        "source": "C:\\Program Files\\Android\\Android Studio\\jbr\\daemon\\7.5\\com.example.goboom.app-main-48:\\mipmap-mdpi\\ic_launcher_round.webp"
-    },
-    {
         "merged": "C:\\Program Files\\Android\\Android Studio\\jbr\\daemon\\7.5\\com.example.goboom.app-merged_res-46:\\xml_data_extraction_rules.xml.flat",
         "source": "C:\\Program Files\\Android\\Android Studio\\jbr\\daemon\\7.5\\com.example.goboom.app-main-48:\\xml\\data_extraction_rules.xml"
+    },
+    {
+        "merged": "C:\\Program Files\\Android\\Android Studio\\jbr\\daemon\\7.5\\com.example.goboom.app-merged_res-46:\\mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Program Files\\Android\\Android Studio\\jbr\\daemon\\7.5\\com.example.goboom.app-main-48:\\mipmap-mdpi\\ic_launcher_round.webp"
     },
     {
         "merged": "C:\\Program Files\\Android\\Android Studio\\jbr\\daemon\\7.5\\com.example.goboom.app-merged_res-46:\\drawable_avatar_12.xml.flat",
@@ -140,10 +140,6 @@
         "source": "C:\\Program Files\\Android\\Android Studio\\jbr\\daemon\\7.5\\com.example.goboom.app-main-48:\\drawable\\avatar_1.xml"
     },
     {
-        "merged": "com.example.goboom.app-merged_res-46:/layout_main_menu.xml.flat",
-        "source": "com.example.goboom.app-main-48:/layout/main_menu.xml"
-    },
-    {
         "merged": "C:\\Program Files\\Android\\Android Studio\\jbr\\daemon\\7.5\\com.example.goboom.app-merged_res-46:\\drawable_dk.png.flat",
         "source": "C:\\Program Files\\Android\\Android Studio\\jbr\\daemon\\7.5\\com.example.goboom.app-main-48:\\drawable\\dk.png"
     },
@@ -162,6 +158,10 @@
     {
         "merged": "C:\\Program Files\\Android\\Android Studio\\jbr\\daemon\\7.5\\com.example.goboom.app-merged_res-46:\\mipmap-hdpi_ic_launcher_round.webp.flat",
         "source": "C:\\Program Files\\Android\\Android Studio\\jbr\\daemon\\7.5\\com.example.goboom.app-main-48:\\mipmap-hdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.goboom.app-merged_res-46:/layout_activity_game.xml.flat",
+        "source": "com.example.goboom.app-main-48:/layout/activity_game.xml"
     },
     {
         "merged": "C:\\Program Files\\Android\\Android Studio\\jbr\\daemon\\7.5\\com.example.goboom.app-merged_res-46:\\drawable_avatar_7.xml.flat",

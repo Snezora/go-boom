@@ -16,7 +16,7 @@
         "source": "C:\\Program Files\\Android\\Android Studio\\jbr\\daemon\\7.5\\com.example.goboom.app-main-48:\\layout\\main_menu.xml"
     },
     {
-        "merged": "com.example.goboom.app-mergeDebugResources-45:/layout/main_menu.xml",
-        "source": "com.example.goboom.app-main-48:/layout/main_menu.xml"
+        "merged": "com.example.goboom.app-mergeDebugResources-45:/layout/activity_game.xml",
+        "source": "com.example.goboom.app-main-48:/layout/activity_game.xml"
     }
 ]

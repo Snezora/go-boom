@@ -204,6 +204,9 @@ public class GameActivity extends AppCompatActivity {
             } else {
                 restart = true;
             }
+            for (Player player : players) {
+                player.turnEnd = false;
+            }
         }
         int temp = result;
 
@@ -211,7 +214,9 @@ public class GameActivity extends AppCompatActivity {
             result = Integer.parseInt(firstPlayer.name.substring(7, 8));
         }
         Log.d("Result", "Player " + result + " won this round!");
-        Toast.makeText(this, "Player " + result + " has won the first round! Continuing the game.", Toast.LENGTH_SHORT).show();
+        if (roundCounter != 1){
+            Toast.makeText(this, "Player " + result + " has won this round! Continuing the game.", Toast.LENGTH_SHORT).show();
+        }
         result = temp;
         return result;
     }
@@ -396,6 +401,8 @@ public class GameActivity extends AppCompatActivity {
             mainHandler.post(new Runnable() {
                 @Override
                 public void run() {
+                    TextView roundCounterText = findViewById(R.id.roundCounterText);
+                    roundCounterText.setText("Round " + takeCounter);
                     TextView playerScoreText = findViewById(R.id.playerScoresText);
                     playerScoreText.setText("Scores = Player 1: " + players[0].score + " | Player 2: " + players[1].score + " | Player 3: " + players[2].score + " | Player 4: " + players[3].score);
                     if (roundCounter == 1) {
@@ -474,9 +481,6 @@ public class GameActivity extends AppCompatActivity {
                             }
 
                             playerCardScreen(currentPlayer);
-                            for (Player player : players) {
-                                player.turnEnd = false;
-                            }
                             printOutput();
                             try {
                                 AutoSaveGame();
@@ -588,9 +592,6 @@ public class GameActivity extends AppCompatActivity {
                             }
 
                             playerCardScreen(currentPlayer);
-                            for (Player player : players) {
-                                player.turnEnd = false;
-                            }
                             printOutput();
                             try {
                                 AutoSaveGame();
@@ -674,9 +675,6 @@ public class GameActivity extends AppCompatActivity {
                                 GameThread.this.run();
                             }
                             playerCardScreen(currentPlayer);
-                            for (Player player : players) {
-                                player.turnEnd = false;
-                            }
                             printOutput();
                             try {
                                 AutoSaveGame();
@@ -759,9 +757,6 @@ public class GameActivity extends AppCompatActivity {
                                     GameThread.this.run();
                                 }
                                 playerCardScreen(currentPlayer);
-                                for (Player player : players) {
-                                    player.turnEnd = false;
-                                }
                                 printOutput();
                                 try {
                                     AutoSaveGame();
@@ -789,9 +784,6 @@ public class GameActivity extends AppCompatActivity {
                                     GameThread.this.run();
                                 }
                                 playerCardScreen(currentPlayer);
-                                for (Player player : players) {
-                                    player.turnEnd = false;
-                                }
                                 printOutput();
                                 try {
                                     AutoSaveGame();
@@ -828,25 +820,25 @@ public class GameActivity extends AppCompatActivity {
     public void seeIfWin() throws IOException {
         if (currentPlayer.cardlist.size() == 0) {
             if (currentPlayer.name.equals(players[0].name)) {
-                Toast.makeText(this, players[0].name + " has won the first match! Restarting with new deck.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, players[0].name + " has won the No. " + takeCounter + " match! Restarting with new deck.", Toast.LENGTH_LONG).show();
                 addScores(players[1]);
                 addScores(players[2]);
                 addScores(players[3]);
             }
             if (currentPlayer.name.equals(players[1].name)) {
-                Toast.makeText(this, players[1].name + " has won the first match! Restarting with new deck.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, players[1].name + " has won the No. " + takeCounter + " match! Restarting with new deck.", Toast.LENGTH_LONG).show();
                 addScores(players[0]);
                 addScores(players[2]);
                 addScores(players[3]);
             }
             if (currentPlayer.name.equals(players[2].name)) {
-                Toast.makeText(this, players[2].name + " has won the first match! Restarting with new deck.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, players[2].name + " has won the No. " + takeCounter + " match! Restarting with new deck.", Toast.LENGTH_LONG).show();
                 addScores(players[0]);
                 addScores(players[1]);
                 addScores(players[3]);
             }
             if (currentPlayer.name.equals(players[3].name)) {
-                Toast.makeText(this, players[3].name + " has won the first match! Restarting with new deck.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, players[3].name + " has won the No. " + takeCounter + " match! Restarting with new deck.", Toast.LENGTH_LONG).show();
                 addScores(players[0]);
                 addScores(players[1]);
                 addScores(players[2]);
@@ -1219,14 +1211,14 @@ public class GameActivity extends AppCompatActivity {
             FileWriter writer = new FileWriter(file, false);
             Gson gson = new Gson();
 
+            String jsonTakeCounter = gson.toJson(takeCounter);
+            writer.write(jsonTakeCounter + lineSeperator);
+
             String jsonRoundCounter = gson.toJson(roundCounter);
             writer.write(jsonRoundCounter + lineSeperator);
-            Log.d("Output", "roundCounter saved!");
-            Log.d("Output", path);
 
             String jsonPlayerNumber = gson.toJson(playerNumber);
             writer.write(jsonPlayerNumber + lineSeperator);
-            Log.d("PlayerNumber", jsonPlayerNumber);
 
             for (Player player : players) {
                 String jsonPlayer = gson.toJson(player);
@@ -1286,14 +1278,14 @@ public class GameActivity extends AppCompatActivity {
             FileWriter writer = new FileWriter(file, false);
             Gson gson = new Gson();
 
+            String jsonTakeCounter = gson.toJson(takeCounter);
+            writer.write(jsonTakeCounter + lineSeperator);
+
             String jsonRoundCounter = gson.toJson(roundCounter);
             writer.write(jsonRoundCounter + lineSeperator);
-            Log.d("Output", "roundCounter saved!");
-            Log.d("Output", path);
 
             String jsonPlayerNumber = gson.toJson(playerNumber);
             writer.write(jsonPlayerNumber + lineSeperator);
-            Log.d("PlayerNumber", jsonPlayerNumber);
 
             for (Player player : players) {
                 String jsonPlayer = gson.toJson(player);
@@ -1328,14 +1320,15 @@ public class GameActivity extends AppCompatActivity {
             FileWriter writer = new FileWriter(file, false);
             Gson gson = new Gson();
 
+            String jsonTakeCounter = gson.toJson(takeCounter);
+            writer.write(jsonTakeCounter + lineSeperator);
+
             String jsonRoundCounter = gson.toJson(roundCounter);
             writer.write(jsonRoundCounter + lineSeperator);
-            Log.d("Output", "roundCounter saved!");
-            Log.d("Output", path);
+
 
             String jsonPlayerNumber = gson.toJson(playerNumber);
             writer.write(jsonPlayerNumber + lineSeperator);
-            Log.d("PlayerNumber", jsonPlayerNumber);
 
             for (Player player : players) {
                 String jsonPlayer = gson.toJson(player);
@@ -1418,12 +1411,13 @@ public class GameActivity extends AppCompatActivity {
             Gson gson = new Gson();
 
             String line = bufferedReader.readLine(); // Read the first line
+            takeCounter = gson.fromJson(line, int.class); // Convert it to an integer
+
+            line = bufferedReader.readLine(); // Read the first line
             roundCounter = gson.fromJson(line, int.class); // Convert it to an integer
 
             line = bufferedReader.readLine();
             playerNumber = gson.fromJson(line, int.class);
-            Log.d("PlayerNumber", String.valueOf(playerNumber));
-
 
             line = bufferedReader.readLine(); // Read the next line
             int index = 0; // This will be the index of the array

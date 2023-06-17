@@ -22,8 +22,8 @@
 
     <LinearLayout
         android:id="@+id/cardsPlayer"
-        android:layout_width="592dp"
-        android:layout_height="117dp"
+        android:layout_width="876dp"
+        android:layout_height="118dp"
         android:layout_marginStart="1dp"
         android:layout_marginEnd="1dp"
         android:layout_marginBottom="4dp"
@@ -247,7 +247,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
         <Button
             android:id="@+id/restartButton"
@@ -320,8 +320,8 @@
                 android:background="@color/purple_700"
                 android:ems="10"
                 android:gravity="center"
-                android:inputType="textPersonName"
                 android:hint="Save Game Name (without .txt)"
+                android:inputType="textPersonName"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.353"
